@@ -9,34 +9,18 @@ import { ExpenseModal } from '@/components/expenses/ExpenseModal';
 import { IncomeModal } from '@/components/income/IncomeModal';
 import { Button } from '@/components/ui/button';
 import { TrendingDown, TrendingUp, Plus } from 'lucide-react';
-import { Expense } from '@/hooks/useExpenses';
-import { Income } from '@/hooks/useIncome';
 
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState<'expenses' | 'income'>('expenses');
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
-  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
-  const [editingIncome, setEditingIncome] = useState<Income | null>(null);
-
-  const handleEditExpense = (expense: Expense) => {
-    setEditingExpense(expense);
-    setIsExpenseModalOpen(true);
-  };
-
-  const handleEditIncome = (income: Income) => {
-    setEditingIncome(income);
-    setIsIncomeModalOpen(true);
-  };
 
   const handleCloseExpenseModal = () => {
     setIsExpenseModalOpen(false);
-    setEditingExpense(null);
   };
 
   const handleCloseIncomeModal = () => {
     setIsIncomeModalOpen(false);
-    setEditingIncome(null);
   };
 
   return (
@@ -107,9 +91,9 @@ export function Dashboard() {
           {/* Transaction Lists Section */}
           <div>
             {activeTab === 'expenses' ? (
-              <ExpenseList onEdit={handleEditExpense} />
+              <ExpenseList />
             ) : (
-              <IncomeList onEdit={handleEditIncome} />
+              <IncomeList />
             )}
           </div>
         </div>
@@ -119,13 +103,11 @@ export function Dashboard() {
       <ExpenseModal
         isOpen={isExpenseModalOpen}
         onClose={handleCloseExpenseModal}
-        expense={editingExpense}
       />
       
       <IncomeModal
         isOpen={isIncomeModalOpen}
         onClose={handleCloseIncomeModal}
-        income={editingIncome}
       />
     </div>
   );

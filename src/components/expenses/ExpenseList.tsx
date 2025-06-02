@@ -1,17 +1,27 @@
 
 import { useState } from 'react';
-import { useExpenses, useDeleteExpense, useUpdateExpense, useCategories } from '@/hooks/useExpenses';
+import { useExpenses, useDeleteExpense, Expense } from '@/hooks/useExpenses';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, Calendar, DollarSign } from 'lucide-react';
-import { ExpenseEditDialog } from './ExpenseEditDialog';
-import type { Expense } from '@/hooks/useExpenses';
+import { ExpenseModal } from './ExpenseModal';
 
 export function ExpenseList() {
   const { data: expenses, isLoading } = useExpenses();
   const deleteExpense = useDeleteExpense();
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleEdit = (expense: Expense) => {
+    setEditingExpense(expense);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingExpense(null);
+  };
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this expense?')) {
@@ -106,7 +116,7 @@ export function ExpenseList() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setEditingExpense(expense)}
+                      onClick={() => handleEdit(expense)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -126,9 +136,10 @@ export function ExpenseList() {
         </CardContent>
       </Card>
 
-      <ExpenseEditDialog
+      <ExpenseModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
         expense={editingExpense}
-        onClose={() => setEditingExpense(null)}
       />
     </>
   );

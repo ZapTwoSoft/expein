@@ -1,17 +1,27 @@
 
 import { useState } from 'react';
-import { useIncome, useDeleteIncome } from '@/hooks/useIncome';
+import { useIncome, useDeleteIncome, Income } from '@/hooks/useIncome';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, Calendar, TrendingUp } from 'lucide-react';
-import { IncomeEditDialog } from './IncomeEditDialog';
-import type { Income } from '@/hooks/useIncome';
+import { IncomeModal } from './IncomeModal';
 
 export function IncomeList() {
   const { data: income, isLoading } = useIncome();
   const deleteIncome = useDeleteIncome();
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleEdit = (incomeItem: Income) => {
+    setEditingIncome(incomeItem);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingIncome(null);
+  };
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this income?')) {
@@ -106,7 +116,7 @@ export function IncomeList() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setEditingIncome(incomeItem)}
+                      onClick={() => handleEdit(incomeItem)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -126,9 +136,10 @@ export function IncomeList() {
         </CardContent>
       </Card>
 
-      <IncomeEditDialog
+      <IncomeModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
         income={editingIncome}
-        onClose={() => setEditingIncome(null)}
       />
     </>
   );
