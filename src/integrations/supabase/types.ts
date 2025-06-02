@@ -24,7 +24,7 @@ export type Database = {
           icon?: string | null
           id?: string
           name: string
-          type?: string
+          type: string
         }
         Update: {
           color?: string | null
@@ -117,6 +117,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      loans: {
+        Row: {
+          amount: number
+          borrower_lender_name: string
+          created_at: string
+          date: string
+          description: string
+          due_date: string | null
+          id: string
+          interest_rate: number | null
+          loan_type: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          borrower_lender_name: string
+          created_at?: string
+          date?: string
+          description: string
+          due_date?: string | null
+          id?: string
+          interest_rate?: number | null
+          loan_type: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          borrower_lender_name?: string
+          created_at?: string
+          date?: string
+          description?: string
+          due_date?: string | null
+          id?: string
+          interest_rate?: number | null
+          loan_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {

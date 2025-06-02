@@ -11,6 +11,7 @@ import { Dashboard } from "@/components/dashboard/Dashboard";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { ExpensesPage } from "@/pages/ExpensesPage";
 import { IncomePage } from "@/pages/IncomePage";
+import { LoansPage } from "@/pages/LoansPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ function AppContent() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/expenses" element={<ExpensesPage />} />
                 <Route path="/income" element={<IncomePage />} />
+                <Route path="/loans" element={<LoansPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
