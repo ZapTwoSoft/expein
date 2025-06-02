@@ -21,8 +21,8 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="text-lg text-slate-600">Loading...</div>
       </div>
     );
   }
@@ -34,18 +34,18 @@ function AppContent() {
   return (
     <BrowserRouter>
       <SidebarProvider>
-        <div className="min-h-screen flex w-full">
+        <div className="min-h-screen flex w-full bg-slate-50">
           <AppSidebar />
           
-          <div className="flex-1">
-            <header className="h-12 flex items-center border-b bg-white px-4">
-              <SidebarTrigger className="ml-2" />
-              <h1 className="ml-4 text-lg font-semibold text-gray-900">
+          <div className="flex-1 flex flex-col">
+            <header className="h-16 flex items-center border-b bg-white px-6 shadow-sm">
+              <SidebarTrigger className="mr-4 p-2 hover:bg-slate-100 rounded-lg transition-colors" />
+              <h1 className="text-xl font-semibold text-slate-800">
                 Financial Tracker
               </h1>
             </header>
             
-            <main className="flex-1">
+            <main className="flex-1 bg-slate-50">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/expenses" element={<ExpensesPage />} />
