@@ -1,17 +1,34 @@
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useExpenses, useDeleteExpense, Expense } from '@/hooks/useExpenses';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, Calendar, DollarSign } from 'lucide-react';
 import { ExpenseModal } from './ExpenseModal';
+import { DateRange } from 'react-day-picker';
+import { isWithinInterval } from 'date-fns';
 
-export function ExpenseList() {
+interface ExpenseListProps {
+  dateRange?: DateRange;
+}
+
+export function ExpenseList({ dateRange }: ExpenseListProps) {
   const { data: expenses, isLoading } = useExpenses();
   const deleteExpense = useDeleteExpense();
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const filteredExpenses = useMemo(() => {
+    if (!expenses) return [];
+    
+    if (!dateRange?.from || !dateRange?.to) return expenses;
+    
+    return expenses.filter(expense => {
+      const expenseDate = new Date(expense.date);
+      return isWithinInterval(expenseDate, { start: dateRange.from!, end: dateRange.to! });
+    });
+  }, [expenses, dateRange]);
 
   const handleEdit = (expense: Expense) => {
     setEditingExpense(expense);
@@ -54,16 +71,23 @@ export function ExpenseList() {
     );
   }
 
-  if (!expenses || expenses.length === 0) {
+  if (!filteredExpenses || filteredExpenses.length === 0) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Recent Expenses</CardTitle>
+          <CardTitle>
+            {dateRange?.from && dateRange?.to ? 'Filtered Expenses' : 'Recent Expenses'}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center text-gray-500 py-8">
             <DollarSign className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-            <p>No expenses yet. Add your first expense above!</p>
+            <p>
+              {dateRange?.from && dateRange?.to 
+                ? 'No expenses found in the selected date range.' 
+                : 'No expenses yet. Add your first expense above!'
+              }
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -74,11 +98,16 @@ export function ExpenseList() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Recent Expenses</CardTitle>
+          <CardTitle>
+            {dateRange?.from && dateRange?.to ? 'Filtered Expenses' : 'Recent Expenses'}
+            <span className="text-sm font-normal text-gray-500 ml-2">
+              ({filteredExpenses.length} {filteredExpenses.length === 1 ? 'expense' : 'expenses'})
+            </span>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {expenses.map((expense) => (
+            {filteredExpenses.map((expense) => (
               <div
                 key={expense.id}
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
