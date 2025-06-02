@@ -16,6 +16,7 @@ export type Database = {
           icon: string | null
           id: string
           name: string
+          type: string
         }
         Insert: {
           color?: string | null
@@ -23,6 +24,7 @@ export type Database = {
           icon?: string | null
           id?: string
           name: string
+          type?: string
         }
         Update: {
           color?: string | null
@@ -30,6 +32,7 @@ export type Database = {
           icon?: string | null
           id?: string
           name?: string
+          type?: string
         }
         Relationships: []
       }
