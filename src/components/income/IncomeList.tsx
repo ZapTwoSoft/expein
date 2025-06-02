@@ -92,55 +92,55 @@ export function IncomeList({ dateRange, onDateRangeChange }: IncomeListProps) {
               {filteredIncome.map((incomeItem) => (
                 <div
                   key={incomeItem.id}
-                  className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-start justify-between p-3 sm:p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3 sm:space-y-0"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg text-green-600">
-                          +৳{incomeItem.amount.toLocaleString()}
-                        </h3>
-                        {incomeItem.categories && (
-                          <Badge variant="outline" className="flex items-center gap-1">
-                            <span>{incomeItem.categories.icon}</span>
-                            {incomeItem.categories.name}
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <p className="text-muted-foreground mb-2">{incomeItem.description}</p>
-                      
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{format(parseISO(incomeItem.date), 'MMM dd, yyyy')}</span>
-                        </div>
-                      </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="font-semibold text-base sm:text-lg text-green-600">
+                        +৳{incomeItem.amount.toLocaleString()}
+                      </h3>
+                      {incomeItem.categories && (
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs">
+                          <span>{incomeItem.categories.icon}</span>
+                          {incomeItem.categories.name}
+                        </Badge>
+                      )}
                     </div>
                     
-                    <div className="flex gap-2 ml-4">
+                    <p className="text-muted-foreground mb-2 text-sm sm:text-base">{incomeItem.description}</p>
+                    
+                    <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="whitespace-nowrap">{format(parseISO(incomeItem.date), 'MMM dd, yyyy')}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-1 sm:gap-2 sm:ml-4 self-end sm:self-start">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(incomeItem)}
+                      className="h-8 w-8 sm:h-9 sm:w-9 p-0"
+                    >
+                      <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
+                    </Button>
+                    <ConfirmationPopover
+                      title="Delete Income"
+                      description={`Are you sure you want to delete "${incomeItem.description}"? This action cannot be undone.`}
+                      onConfirm={() => handleDelete(incomeItem.id)}
+                      disabled={deleteIncome.isPending}
+                    >
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleEdit(incomeItem)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <ConfirmationPopover
-                        title="Delete Income"
-                        description={`Are you sure you want to delete "${incomeItem.description}"? This action cannot be undone.`}
-                        onConfirm={() => handleDelete(incomeItem.id)}
                         disabled={deleteIncome.isPending}
+                        className="h-8 w-8 sm:h-9 sm:w-9 p-0"
                       >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled={deleteIncome.isPending}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </ConfirmationPopover>
-                    </div>
+                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
+                    </ConfirmationPopover>
                   </div>
                 </div>
               ))}

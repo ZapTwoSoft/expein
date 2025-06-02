@@ -1,5 +1,6 @@
 import { Home, TrendingDown, TrendingUp, HandCoins } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -22,11 +23,25 @@ const items = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const { state } = useSidebar();
+  const { state, setOpenMobile, isMobile } = useSidebar();
   const currentPath = location.pathname;
 
   const isActive = (path: string) => currentPath === path;
   const isCollapsed = state === 'collapsed';
+
+  // Close sidebar on mobile when navigation occurs
+  useEffect(() => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }, [location.pathname, isMobile, setOpenMobile]);
+
+  const handleNavClick = () => {
+    // Close mobile sidebar when navigation item is clicked
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -51,7 +66,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)} tooltip={item.title}>
-                    <NavLink to={item.url} end>
+                    <NavLink to={item.url} end onClick={handleNavClick}>
                       <item.icon />
                       <span>{item.title}</span>
                     </NavLink>

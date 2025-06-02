@@ -111,74 +111,74 @@ export function LoanList({ dateRange, onDateRangeChange }: LoanListProps) {
               {filteredLoans.map((loan) => (
                 <div
                   key={loan.id}
-                  className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-start justify-between p-3 sm:p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3 sm:space-y-0"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg">
-                          ৳{loan.amount.toLocaleString()}
-                        </h3>
-                        <Badge className={getTypeColor(loan.loan_type)}>
-                          {loan.loan_type === 'given' ? 'Given' : 'Taken'}
-                        </Badge>
-                        <Badge className={getStatusColor(loan.status)}>
-                          {loan.status.replace('_', ' ')}
-                        </Badge>
-                      </div>
-                      
-                      <p className="text-muted-foreground mb-2">{loan.description}</p>
-                      
-                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <User className="h-4 w-4" />
-                          <span>{loan.borrower_lender_name}</span>
-                        </div>
-                        
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{format(parseISO(loan.date), 'MMM dd, yyyy')}</span>
-                        </div>
-                        
-                        {loan.due_date && (
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>Due: {format(parseISO(loan.due_date), 'MMM dd, yyyy')}</span>
-                          </div>
-                        )}
-                        
-                        {loan.interest_rate && (
-                          <div className="flex items-center gap-1">
-                            <Percent className="h-4 w-4" />
-                            <span>{loan.interest_rate}%</span>
-                          </div>
-                        )}
-                      </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <h3 className="font-semibold text-base sm:text-lg">
+                        ৳{loan.amount.toLocaleString()}
+                      </h3>
+                      <Badge className={getTypeColor(loan.loan_type)} >
+                        {loan.loan_type === 'given' ? 'Given' : 'Taken'}
+                      </Badge>
+                      <Badge className={getStatusColor(loan.status)}>
+                        {loan.status.replace('_', ' ')}
+                      </Badge>
                     </div>
                     
-                    <div className="flex gap-2 ml-4">
+                    <p className="text-muted-foreground mb-2 text-sm sm:text-base">{loan.description}</p>
+                    
+                    <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="truncate">{loan.borrower_lender_name}</span>
+                      </div>
+                      
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="whitespace-nowrap">{format(parseISO(loan.date), 'MMM dd, yyyy')}</span>
+                      </div>
+                      
+                      {loan.due_date && (
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span className="whitespace-nowrap">Due: {format(parseISO(loan.due_date), 'MMM dd, yyyy')}</span>
+                        </div>
+                      )}
+                      
+                      {loan.interest_rate && (
+                        <div className="flex items-center gap-1">
+                          <Percent className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span>{loan.interest_rate}%</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-1 sm:gap-2 sm:ml-4 self-end sm:self-start">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(loan)}
+                      className="h-8 w-8 sm:h-9 sm:w-9 p-0"
+                    >
+                      <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
+                    </Button>
+                    <ConfirmationPopover
+                      title="Delete Loan"
+                      description={`Are you sure you want to delete the loan with "${loan.borrower_lender_name}"? This action cannot be undone.`}
+                      onConfirm={() => handleDelete(loan.id)}
+                      disabled={deleteLoan.isPending}
+                    >
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleEdit(loan)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <ConfirmationPopover
-                        title="Delete Loan"
-                        description={`Are you sure you want to delete the loan with "${loan.borrower_lender_name}"? This action cannot be undone.`}
-                        onConfirm={() => handleDelete(loan.id)}
                         disabled={deleteLoan.isPending}
+                        className="h-8 w-8 sm:h-9 sm:w-9 p-0"
                       >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled={deleteLoan.isPending}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </ConfirmationPopover>
-                    </div>
+                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
+                    </ConfirmationPopover>
                   </div>
                 </div>
               ))}

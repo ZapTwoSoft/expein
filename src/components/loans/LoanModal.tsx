@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAddLoan, useUpdateLoan, Loan } from '@/hooks/useLoans';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DatePickerFallback } from '@/components/ui/date-picker-fallback';
 
 interface LoanModalProps {
   isOpen: boolean;
@@ -18,8 +18,8 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
   const [description, setDescription] = useState('');
   const [loanType, setLoanType] = useState<'given' | 'taken'>('given');
   const [borrowerLenderName, setBorrowerLenderName] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [dueDate, setDueDate] = useState('');
+  const [date, setDate] = useState<Date>(new Date());
+  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
   const [interestRate, setInterestRate] = useState('');
   const [status, setStatus] = useState<'active' | 'paid' | 'partially_paid'>('active');
 
@@ -34,8 +34,8 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
       setDescription(loan.description);
       setLoanType(loan.loan_type);
       setBorrowerLenderName(loan.borrower_lender_name);
-      setDate(loan.date);
-      setDueDate(loan.due_date || '');
+      setDate(new Date(loan.date));
+      setDueDate(loan.due_date ? new Date(loan.due_date) : undefined);
       setInterestRate(loan.interest_rate?.toString() || '');
       setStatus(loan.status);
     } else {
@@ -43,8 +43,8 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
       setDescription('');
       setLoanType('given');
       setBorrowerLenderName('');
-      setDate(new Date().toISOString().split('T')[0]);
-      setDueDate('');
+      setDate(new Date());
+      setDueDate(undefined);
       setInterestRate('');
       setStatus('active');
     }
@@ -53,15 +53,15 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !borrowerLenderName) return;
+    if (!amount || !description || !borrowerLenderName || !date) return;
 
     const loanData = {
       amount: parseFloat(amount),
       description,
       loan_type: loanType,
       borrower_lender_name: borrowerLenderName,
-      date,
-      due_date: dueDate || null,
+      date: date.toISOString().split('T')[0],
+      due_date: dueDate ? dueDate.toISOString().split('T')[0] : null,
       interest_rate: interestRate ? parseFloat(interestRate) : null,
       ...(isEditing && { status })
     };
@@ -81,91 +81,91 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="sm:max-w-[450px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">
             {isEditing ? 'Edit Loan' : 'Add New Loan'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="space-y-2">
-              <Label htmlFor="loan-amount">Amount</Label>
+              <Label htmlFor="amount" className="text-sm">Amount</Label>
               <Input
-                id="loan-amount"
+                id="amount"
                 type="number"
                 step="0.01"
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
+                className="text-sm"
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="loan-type">Type</Label>
+              <Label htmlFor="loan-type" className="text-sm">Type</Label>
               <Select value={loanType} onValueChange={(value: 'given' | 'taken') => setLoanType(value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select loan type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="given">Loan Given</SelectItem>
-                  <SelectItem value="taken">Loan Taken</SelectItem>
+                  <SelectItem value="given" className="text-sm">Given</SelectItem>
+                  <SelectItem value="taken" className="text-sm">Taken</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="loan-description">Description</Label>
+            <Label htmlFor="borrower-lender" className="text-sm">
+              {loanType === 'given' ? 'Borrower Name' : 'Lender Name'}
+            </Label>
             <Input
-              id="loan-description"
-              placeholder="Enter loan description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              id="borrower-lender"
+              placeholder={loanType === 'given' ? 'Enter borrower name' : 'Enter lender name'}
+              value={borrowerLenderName}
+              onChange={(e) => setBorrowerLenderName(e.target.value)}
               required
+              className="text-sm"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="borrower-lender-name">
-              {loanType === 'given' ? 'Borrower Name' : 'Lender Name'}
-            </Label>
+            <Label htmlFor="description" className="text-sm">Description</Label>
             <Input
-              id="borrower-lender-name"
-              placeholder={`Enter ${loanType === 'given' ? 'borrower' : 'lender'} name`}
-              value={borrowerLenderName}
-              onChange={(e) => setBorrowerLenderName(e.target.value)}
+              id="description"
+              placeholder="Enter loan description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               required
+              className="text-sm"
             />
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="space-y-2">
-              <Label htmlFor="loan-date">Date</Label>
-              <Input
-                id="loan-date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
+              <Label className="text-sm">Date</Label>
+              <DatePickerFallback
+                date={date}
+                onDateChange={setDate}
+                placeholder="Select loan date"
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="due-date">Due Date</Label>
-              <Input
-                id="due-date"
-                type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
+              <Label className="text-sm">Due Date (Optional)</Label>
+              <DatePickerFallback
+                date={dueDate}
+                onDateChange={setDueDate}
+                placeholder="Select due date"
               />
             </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="space-y-2">
-              <Label htmlFor="interest-rate">Interest Rate (%)</Label>
+              <Label htmlFor="interest-rate" className="text-sm">Interest Rate (%) - Optional</Label>
               <Input
                 id="interest-rate"
                 type="number"
@@ -173,33 +173,38 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
                 placeholder="0.00"
                 value={interestRate}
                 onChange={(e) => setInterestRate(e.target.value)}
+                className="text-sm"
               />
             </div>
-
-            {isEditing && (
-              <div className="space-y-2">
-                <Label htmlFor="loan-status">Status</Label>
-                <Select value={status} onValueChange={(value: 'active' | 'paid' | 'partially_paid') => setStatus(value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="partially_paid">Partially Paid</SelectItem>
-                    <SelectItem value="paid">Paid</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+            
+            <div className="space-y-2">
+              <Label htmlFor="status" className="text-sm">Status</Label>
+              <Select value={status} onValueChange={(value: 'active' | 'paid' | 'partially_paid') => setStatus(value)}>
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active" className="text-sm">Active</SelectItem>
+                  <SelectItem value="partially_paid" className="text-sm">Partially Paid</SelectItem>
+                  <SelectItem value="paid" className="text-sm">Paid</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           
-          <div className="flex justify-end space-x-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onClose}
+              className="text-sm h-8 sm:h-9"
+            >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={addLoan.isPending || updateLoan.isPending}
+              className="text-sm h-8 sm:h-9"
             >
               {addLoan.isPending || updateLoan.isPending 
                 ? (isEditing ? "Updating..." : "Adding...") 

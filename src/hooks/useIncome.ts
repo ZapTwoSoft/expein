@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -71,13 +70,14 @@ export function useAddIncome() {
       toast({
         title: "Income added",
         description: "Your income has been successfully added.",
+        variant: "success",
       });
     },
     onError: (error: any) => {
       toast({
         title: "Error adding income",
         description: error.message,
-        variant: "destructive",
+        variant: "error",
       });
     },
   });
@@ -113,13 +113,14 @@ export function useUpdateIncome() {
       toast({
         title: "Income updated",
         description: "Your income has been successfully updated.",
+        variant: "success",
       });
     },
     onError: (error: any) => {
       toast({
         title: "Error updating income",
         description: error.message,
-        variant: "destructive",
+        variant: "error",
       });
     },
   });
@@ -143,13 +144,14 @@ export function useDeleteIncome() {
       toast({
         title: "Income deleted",
         description: "Your income has been successfully deleted.",
+        variant: "success",
       });
     },
     onError: (error: any) => {
       toast({
         title: "Error deleting income",
         description: error.message,
-        variant: "destructive",
+        variant: "error",
       });
     },
   });

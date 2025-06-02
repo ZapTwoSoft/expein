@@ -1,4 +1,3 @@
-
 import { useMemo, useState } from 'react';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useIncome } from '@/hooks/useIncome';
@@ -81,21 +80,29 @@ export function IncomeExpenseChart() {
 
   return (
     <Card className="bg-white shadow-sm ring-1 ring-gray-900/5">
-      <CardHeader className="border-b border-gray-200 bg-white px-6 py-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-gray-900">
+      <CardHeader className="border-b border-gray-200 bg-white px-3 sm:px-6 py-3 sm:py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+          <CardTitle className="text-base sm:text-lg font-semibold text-gray-900">
             Income vs Expenses Trend
           </CardTitle>
           <DateRangePicker
             date={dateRange}
             onDateChange={setDateRange}
-            className="w-auto"
+            className="w-full sm:w-auto"
           />
         </div>
       </CardHeader>
-      <CardContent className="px-6 py-6">
-        <ChartContainer config={chartConfig} className="h-[400px]">
-          <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+      <CardContent className="px-3 sm:px-6 py-4 sm:py-6">
+        <ChartContainer config={chartConfig} className="h-[250px] sm:h-[350px] lg:h-[400px]">
+          <AreaChart 
+            data={chartData} 
+            margin={{ 
+              top: 20, 
+              right: 10, 
+              left: 10, 
+              bottom: 5 
+            }}
+          >
             <defs>
               <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.3}/>
@@ -110,13 +117,15 @@ export function IncomeExpenseChart() {
               dataKey="displayDate" 
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: '#6B7280' }}
+              tick={{ fontSize: 10, fill: '#6B7280' }}
+              interval="preserveStartEnd"
             />
             <YAxis 
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: '#6B7280' }}
-              tickFormatter={(value) => `৳${value.toLocaleString()}`}
+              tick={{ fontSize: 10, fill: '#6B7280' }}
+              tickFormatter={(value) => `৳${value > 1000 ? (value/1000).toFixed(0) + 'k' : value.toLocaleString()}`}
+              width={45}
             />
             <ChartTooltip 
               content={<ChartTooltipContent />}
@@ -125,6 +134,7 @@ export function IncomeExpenseChart() {
                 border: '1px solid #E5E7EB',
                 borderRadius: '8px',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                fontSize: '12px',
               }}
             />
             <Area

@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -41,11 +40,12 @@ export function useAddLoan() {
     mutationFn: async (loan: {
       amount: number;
       description: string;
-      loan_type: 'given' | 'taken';
       borrower_lender_name: string;
+      loan_type: 'given' | 'taken';
       date: string;
-      due_date?: string | null;
-      interest_rate?: number | null;
+      due_date?: string;
+      interest_rate?: number;
+      status: 'active' | 'paid' | 'partially_paid';
     }) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
@@ -64,13 +64,14 @@ export function useAddLoan() {
       toast({
         title: "Loan added",
         description: "Your loan has been successfully added.",
+        variant: "success",
       });
     },
     onError: (error: any) => {
       toast({
         title: "Error adding loan",
         description: error.message,
-        variant: "destructive",
+        variant: "error",
       });
     },
   });
@@ -88,11 +89,11 @@ export function useUpdateLoan() {
       id: string;
       amount: number;
       description: string;
-      loan_type: 'given' | 'taken';
       borrower_lender_name: string;
+      loan_type: 'given' | 'taken';
       date: string;
-      due_date?: string | null;
-      interest_rate?: number | null;
+      due_date?: string;
+      interest_rate?: number;
       status: 'active' | 'paid' | 'partially_paid';
     }) => {
       const { data, error } = await supabase
@@ -110,13 +111,14 @@ export function useUpdateLoan() {
       toast({
         title: "Loan updated",
         description: "Your loan has been successfully updated.",
+        variant: "success",
       });
     },
     onError: (error: any) => {
       toast({
         title: "Error updating loan",
         description: error.message,
-        variant: "destructive",
+        variant: "error",
       });
     },
   });
@@ -140,13 +142,14 @@ export function useDeleteLoan() {
       toast({
         title: "Loan deleted",
         description: "Your loan has been successfully deleted.",
+        variant: "success",
       });
     },
     onError: (error: any) => {
       toast({
         title: "Error deleting loan",
         description: error.message,
-        variant: "destructive",
+        variant: "error",
       });
     },
   });

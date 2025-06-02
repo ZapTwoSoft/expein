@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAddIncome, useUpdateIncome, Income } from '@/hooks/useIncome';
 import { useCategories } from '@/hooks/useExpenses';
@@ -7,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DatePickerFallback } from '@/components/ui/date-picker-fallback';
 
 interface IncomeModalProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState<string>('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState<Date>(new Date());
 
   const addIncome = useAddIncome();
   const updateIncome = useUpdateIncome();
@@ -31,25 +31,25 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
       setAmount(income.amount.toString());
       setDescription(income.description);
       setCategoryId(income.category_id || '');
-      setDate(income.date);
+      setDate(new Date(income.date));
     } else {
       setAmount('');
       setDescription('');
       setCategoryId('');
-      setDate(new Date().toISOString().split('T')[0]);
+      setDate(new Date());
     }
   }, [income]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description) return;
+    if (!amount || !description || !date) return;
 
     const incomeData = {
       amount: parseFloat(amount),
       description,
       category_id: categoryId || null,
-      date,
+      date: date.toISOString().split('T')[0],
     };
 
     if (isEditing) {
@@ -66,59 +66,59 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">
             {isEditing ? 'Edit Income' : 'Add New Income'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             <div className="space-y-2">
-              <Label htmlFor="income-amount">Amount</Label>
+              <Label htmlFor="amount" className="text-sm">Amount</Label>
               <Input
-                id="income-amount"
+                id="amount"
                 type="number"
                 step="0.01"
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
+                className="text-sm"
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="income-date">Date</Label>
-              <Input
-                id="income-date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
+              <Label className="text-sm">Date</Label>
+              <DatePickerFallback
+                date={date}
+                onDateChange={setDate}
+                placeholder="Select income date"
               />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="income-description">Description</Label>
+            <Label htmlFor="description" className="text-sm">Description</Label>
             <Input
-              id="income-description"
+              id="description"
               placeholder="Enter income description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              className="text-sm"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="income-category">Category</Label>
+            <Label htmlFor="category" className="text-sm">Category</Label>
             <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
                 {categories?.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
+                  <SelectItem key={category.id} value={category.id} className="text-sm">
                     <div className="flex items-center">
                       <span className="mr-2">{category.icon}</span>
                       {category.name}
@@ -129,14 +129,19 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
             </Select>
           </div>
           
-          <div className="flex justify-end space-x-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onClose}
+              className="text-sm h-8 sm:h-9"
+            >
               Cancel
             </Button>
             <Button 
               type="submit" 
-              className="bg-green-600 hover:bg-green-700"
               disabled={addIncome.isPending || updateIncome.isPending}
+              className="text-sm h-8 sm:h-9"
             >
               {addIncome.isPending || updateIncome.isPending 
                 ? (isEditing ? "Updating..." : "Adding...") 

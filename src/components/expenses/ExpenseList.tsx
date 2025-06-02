@@ -108,23 +108,24 @@ export function ExpenseList({ dateRange, onDateRangeChange }: ExpenseListProps) 
               {filteredExpenses.map((expense) => (
                 <div
                   key={expense.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3 sm:space-y-0"
                 >
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <span className="text-2xl">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-2 sm:space-x-3 mb-2">
+                      <span className="text-xl sm:text-2xl flex-shrink-0">
                         {expense.categories?.icon || '📦'}
                       </span>
-                      <div>
-                        <h3 className="font-medium">{expense.description}</h3>
-                        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-medium text-sm sm:text-base truncate">{expense.description}</h3>
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground mt-1">
                           <div className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            {formatDate(expense.date)}
+                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                            <span className="whitespace-nowrap">{formatDate(expense.date)}</span>
                           </div>
                           {expense.categories && (
                             <Badge
                               variant="secondary"
+                              className="text-xs"
                               style={{ backgroundColor: expense.categories.color + '20' }}
                             >
                               {expense.categories.name}
@@ -135,17 +136,18 @@ export function ExpenseList({ dateRange, onDateRangeChange }: ExpenseListProps) 
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-3">
-                    <span className="text-lg font-semibold">
+                  <div className="flex items-center justify-between sm:justify-end space-x-3 sm:space-x-3">
+                    <span className="text-base sm:text-lg font-semibold text-red-600">
                       {formatCurrency(expense.amount)}
                     </span>
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-1 sm:space-x-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(expense)}
+                        className="h-8 w-8 sm:h-9 sm:w-9 p-0"
                       >
-                        <Edit className="h-4 w-4" />
+                        <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                       </Button>
                       <ConfirmationPopover
                         title="Delete Expense"
@@ -157,8 +159,9 @@ export function ExpenseList({ dateRange, onDateRangeChange }: ExpenseListProps) 
                           variant="outline"
                           size="sm"
                           disabled={deleteExpense.isPending}
+                          className="h-8 w-8 sm:h-9 sm:w-9 p-0"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
                       </ConfirmationPopover>
                     </div>

@@ -19,77 +19,69 @@ export function LoansPage() {
   const totalTaken = takenLoans.reduce((sum, loan) => sum + loan.amount, 0);
   const netPosition = totalGiven - totalTaken;
 
+  const activeLoans = loans?.length || 0;
+  const netBalance = netPosition;
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Loans</h1>
-          <p className="text-muted-foreground mt-1">
-            Track loans you've given and taken
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Loans</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+            Track loans given and taken
           </p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="flex items-center">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Loan
+        <Button 
+          onClick={() => setIsModalOpen(true)} 
+          className="flex items-center text-sm sm:text-base h-8 sm:h-9 px-3 sm:px-4"
+        >
+          <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+          <span className="sm:hidden">Add</span>
+          <span className="hidden sm:inline">Add Loan</span>
         </Button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Loans Given</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Total Given</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-lg sm:text-2xl font-bold text-green-600">
               ৳{totalGiven.toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
-              {givenLoans.length} loan{givenLoans.length !== 1 ? 's' : ''}
-            </p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Loans Taken</CardTitle>
-            <TrendingDown className="h-4 w-4 text-red-600" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Total Taken</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-lg sm:text-2xl font-bold text-red-600">
               ৳{totalTaken.toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
-              {takenLoans.length} loan{takenLoans.length !== 1 ? 's' : ''}
-            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Net Position</CardTitle>
-            <HandCoins className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Active Loans</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${netPosition >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              ৳{Math.abs(netPosition).toLocaleString()}
+            <div className="text-lg sm:text-2xl font-bold">{activeLoans}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">Net Balance</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className={`text-lg sm:text-2xl font-bold ${netBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              ৳{netBalance.toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
-              {netPosition >= 0 ? 'Net creditor' : 'Net debtor'}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Loans</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{loans?.length || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              All loans combined
-            </p>
           </CardContent>
         </Card>
       </div>
