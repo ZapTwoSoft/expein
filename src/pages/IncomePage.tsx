@@ -1,11 +1,9 @@
-
 import { useState } from 'react';
 import { useIncome } from '@/hooks/useIncome';
 import { IncomeList } from '@/components/income/IncomeList';
 import { IncomeModal } from '@/components/income/IncomeModal';
-import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Button } from '@/components/ui/button';
-import { Plus, Filter } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -18,11 +16,11 @@ export function IncomePage() {
   const incomeCount = income?.length || 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Income</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Income</h1>
+          <p className="text-muted-foreground mt-1">
             Manage and track your income sources
           </p>
         </div>
@@ -43,7 +41,7 @@ export function IncomePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              ${totalIncome.toLocaleString()}
+              ৳{totalIncome.toLocaleString()}
             </div>
           </CardContent>
         </Card>
@@ -63,34 +61,14 @@ export function IncomePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${incomeCount > 0 ? (totalIncome / incomeCount).toFixed(2) : '0.00'}
+              ৳{incomeCount > 0 ? (totalIncome / incomeCount).toFixed(2) : '0.00'}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center">
-              <Filter className="h-5 w-5 mr-2" />
-              Filters
-            </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <DateRangePicker
-              date={dateRange}
-              onDateChange={setDateRange}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Income List */}
-      <IncomeList dateRange={dateRange} />
+      {/* Income List with integrated filter */}
+      <IncomeList dateRange={dateRange} onDateRangeChange={setDateRange} />
 
       <IncomeModal
         isOpen={isModalOpen}

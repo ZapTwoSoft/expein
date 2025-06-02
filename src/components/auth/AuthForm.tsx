@@ -90,7 +90,7 @@ export function AuthForm() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md shadow-xl border-0">
         <CardHeader className="text-center pb-2">
-          <CardTitle className="text-3xl font-bold text-slate-800">Financial Tracker</CardTitle>
+          <CardTitle className="text-3xl font-bold text-slate-800">Expein</CardTitle>
           <CardDescription className="text-slate-600 mt-2">
             Track your expenses and manage your budget
           </CardDescription>

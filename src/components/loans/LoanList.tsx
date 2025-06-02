@@ -1,19 +1,21 @@
-
 import { useState } from 'react';
 import { useLoans, useDeleteLoan, Loan } from '@/hooks/useLoans';
 import { LoanModal } from './LoanModal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Edit, Trash2, Calendar, User, Percent } from 'lucide-react';
+import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { ConfirmationPopover } from '@/components/ui/confirmation-popover';
+import { Edit, Trash2, Calendar, User, Percent, Filter, HandCoins } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { format, isWithinInterval, parseISO } from 'date-fns';
 
 interface LoanListProps {
   dateRange?: DateRange;
+  onDateRangeChange?: (dateRange: DateRange | undefined) => void;
 }
 
-export function LoanList({ dateRange }: LoanListProps) {
+export function LoanList({ dateRange, onDateRangeChange }: LoanListProps) {
   const { data: loans, isLoading } = useLoans();
   const deleteLoan = useDeleteLoan();
   const [editingLoan, setEditingLoan] = useState<Loan | null>(null);
@@ -35,9 +37,7 @@ export function LoanList({ dateRange }: LoanListProps) {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this loan?')) {
-      await deleteLoan.mutateAsync(id);
-    }
+    await deleteLoan.mutateAsync(id);
   };
 
   const handleCloseModal = () => {
@@ -65,32 +65,59 @@ export function LoanList({ dateRange }: LoanListProps) {
   };
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading loans...</div>;
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="text-center">Loading loans...</div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Loan History</CardTitle>
+          <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+            <CardTitle className="flex items-center">
+              {dateRange?.from && dateRange?.to ? 'Filtered Loans' : 'Loan History'}
+              <span className="text-sm font-normal text-muted-foreground ml-2">
+                ({filteredLoans?.length || 0} {(filteredLoans?.length || 0) === 1 ? 'loan' : 'loans'})
+              </span>
+            </CardTitle>
+            {onDateRangeChange && (
+              <div className="flex items-center gap-2">
+                <DateRangePicker
+                  date={dateRange}
+                  onDateChange={onDateRangeChange}
+                />
+              </div>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {filteredLoans.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              No loans found. Add your first loan to get started.
+            <div className="text-center text-muted-foreground py-8">
+              <HandCoins className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+              <p>
+                {dateRange?.from && dateRange?.to 
+                  ? 'No loans found in the selected date range.' 
+                  : 'No loans found. Add your first loan to get started.'
+                }
+              </p>
             </div>
           ) : (
             <div className="space-y-4">
               {filteredLoans.map((loan) => (
                 <div
                   key={loan.id}
-                  className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                  className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold text-lg">
-                          ${loan.amount.toLocaleString()}
+                          ৳{loan.amount.toLocaleString()}
                         </h3>
                         <Badge className={getTypeColor(loan.loan_type)}>
                           {loan.loan_type === 'given' ? 'Given' : 'Taken'}
@@ -100,9 +127,9 @@ export function LoanList({ dateRange }: LoanListProps) {
                         </Badge>
                       </div>
                       
-                      <p className="text-gray-600 mb-2">{loan.description}</p>
+                      <p className="text-muted-foreground mb-2">{loan.description}</p>
                       
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <User className="h-4 w-4" />
                           <span>{loan.borrower_lender_name}</span>
@@ -134,18 +161,23 @@ export function LoanList({ dateRange }: LoanListProps) {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(loan)}
-                        className="hover:bg-blue-50"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(loan.id)}
-                        className="hover:bg-red-50 text-red-600 hover:text-red-700"
+                      <ConfirmationPopover
+                        title="Delete Loan"
+                        description={`Are you sure you want to delete the loan with "${loan.borrower_lender_name}"? This action cannot be undone.`}
+                        onConfirm={() => handleDelete(loan.id)}
+                        disabled={deleteLoan.isPending}
                       >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={deleteLoan.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </ConfirmationPopover>
                     </div>
                   </div>
                 </div>

@@ -116,7 +116,7 @@ export function IncomeExpenseChart() {
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: '#6B7280' }}
-              tickFormatter={(value) => `$${value.toLocaleString()}`}
+              tickFormatter={(value) => `৳${value.toLocaleString()}`}
             />
             <ChartTooltip 
               content={<ChartTooltipContent />}

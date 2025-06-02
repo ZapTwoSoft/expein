@@ -1,11 +1,9 @@
-
 import { useState } from 'react';
 import { useLoans } from '@/hooks/useLoans';
 import { LoanList } from '@/components/loans/LoanList';
 import { LoanModal } from '@/components/loans/LoanModal';
-import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Button } from '@/components/ui/button';
-import { Plus, Filter, HandCoins, TrendingDown, TrendingUp } from 'lucide-react';
+import { Plus, HandCoins, TrendingDown, TrendingUp } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -22,11 +20,11 @@ export function LoansPage() {
   const netPosition = totalGiven - totalTaken;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Loans</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Loans</h1>
+          <p className="text-muted-foreground mt-1">
             Track loans you've given and taken
           </p>
         </div>
@@ -45,7 +43,7 @@ export function LoansPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              ${totalGiven.toLocaleString()}
+              ৳{totalGiven.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
               {givenLoans.length} loan{givenLoans.length !== 1 ? 's' : ''}
@@ -60,7 +58,7 @@ export function LoansPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              ${totalTaken.toLocaleString()}
+              ৳{totalTaken.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
               {takenLoans.length} loan{takenLoans.length !== 1 ? 's' : ''}
@@ -75,7 +73,7 @@ export function LoansPage() {
           </CardHeader>
           <CardContent>
             <div className={`text-2xl font-bold ${netPosition >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              ${Math.abs(netPosition).toLocaleString()}
+              ৳{Math.abs(netPosition).toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
               {netPosition >= 0 ? 'Net creditor' : 'Net debtor'}
@@ -96,28 +94,8 @@ export function LoansPage() {
         </Card>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center">
-              <Filter className="h-5 w-5 mr-2" />
-              Filters
-            </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <DateRangePicker
-              date={dateRange}
-              onDateChange={setDateRange}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Loan List */}
-      <LoanList dateRange={dateRange} />
+      {/* Loan List with integrated filter */}
+      <LoanList dateRange={dateRange} onDateRangeChange={setDateRange} />
 
       <LoanModal
         isOpen={isModalOpen}

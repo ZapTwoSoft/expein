@@ -1,11 +1,9 @@
-
 import { useState } from 'react';
 import { useExpenses } from '@/hooks/useExpenses';
 import { ExpenseList } from '@/components/expenses/ExpenseList';
 import { ExpenseModal } from '@/components/expenses/ExpenseModal';
-import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Button } from '@/components/ui/button';
-import { Plus, Filter } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -18,11 +16,11 @@ export function ExpensesPage() {
   const expenseCount = expenses?.length || 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Expenses</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Expenses</h1>
+          <p className="text-muted-foreground mt-1">
             Manage and track your expenses
           </p>
         </div>
@@ -40,7 +38,7 @@ export function ExpensesPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              ${totalExpenses.toLocaleString()}
+              ৳{totalExpenses.toLocaleString()}
             </div>
           </CardContent>
         </Card>
@@ -60,34 +58,14 @@ export function ExpensesPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${expenseCount > 0 ? (totalExpenses / expenseCount).toFixed(2) : '0.00'}
+              ৳{expenseCount > 0 ? (totalExpenses / expenseCount).toFixed(2) : '0.00'}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center">
-              <Filter className="h-5 w-5 mr-2" />
-              Filters
-            </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <DateRangePicker
-              date={dateRange}
-              onDateChange={setDateRange}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Expense List */}
-      <ExpenseList dateRange={dateRange} />
+      {/* Expense List with integrated filter */}
+      <ExpenseList dateRange={dateRange} onDateRangeChange={setDateRange} />
 
       <ExpenseModal
         isOpen={isModalOpen}

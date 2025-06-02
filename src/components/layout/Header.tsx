@@ -21,7 +21,7 @@ export function Header() {
           <div className="flex items-center">
             <DollarSign className="h-8 w-8 text-blue-600" />
             <h1 className="ml-2 text-xl font-bold text-gray-900">
-              Expense Tracker
+              Expein
             </h1>
           </div>
           
