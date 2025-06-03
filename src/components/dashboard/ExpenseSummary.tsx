@@ -5,7 +5,7 @@ import { useIncome } from '@/hooks/useIncome';
 import { useLoans } from '@/hooks/useLoans';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SkeletonSummaryCard } from '@/components/ui/skeleton';
-import { TrendingUp, TrendingDown, DollarSign, Calendar } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Calendar, HandCoins } from 'lucide-react';
 
 export function ExpenseSummary() {
   const { data: expenses, isLoading: expensesLoading } = useExpenses();
@@ -20,7 +20,9 @@ export function ExpenseSummary() {
       totalExpensesThisMonth: 0, 
       totalExpensesLastMonth: 0, 
       totalIncomeThisMonth: 0, 
-      totalIncomeLastMonth: 0 
+      totalIncomeLastMonth: 0,
+      totalLoansGiven: 0,
+      totalLoansTaken: 0
     };
 
     const now = new Date();
@@ -96,11 +98,22 @@ export function ExpenseSummary() {
       })
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
+    // Calculate total loans given and taken (all time)
+    const totalLoansGiven = loans
+      ?.filter(loan => loan.loan_type === 'given')
+      .reduce((sum, loan) => sum + loan.amount, 0) || 0;
+
+    const totalLoansTaken = loans
+      ?.filter(loan => loan.loan_type === 'taken')
+      .reduce((sum, loan) => sum + loan.amount, 0) || 0;
+
     return {
       totalExpensesThisMonth: totalExpensesThisMonth + givenLoansThisMonth,
       totalExpensesLastMonth: totalExpensesLastMonth + givenLoansLastMonth,
       totalIncomeThisMonth: totalIncomeThisMonth + takenLoansThisMonth,
       totalIncomeLastMonth: totalIncomeLastMonth + takenLoansLastMonth,
+      totalLoansGiven,
+      totalLoansTaken
     };
   }, [expenses, income, loans]);
 
@@ -176,33 +189,42 @@ export function ExpenseSummary() {
         </CardContent>
       </Card>
 
-      {/* Card 4: Last Month Income & Expense */}
-      <Card className="bg-gray-50 border-gray-200">
+      {/* Card 4: Loans Given & Taken */}
+      <Card 
+        className="bg-purple-50 border-purple-200 cursor-pointer hover:bg-purple-100 transition-colors"
+        onClick={() => navigate('/loans')}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Last Month</CardTitle>
-          <Calendar className="h-4 w-4 text-gray-600" />
+          <CardTitle className="text-sm font-medium">Loans</CardTitle>
+          <HandCoins className="h-4 w-4 text-purple-600" />
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             <div 
-              className="flex items-center justify-between cursor-pointer hover:bg-green-50 p-1 rounded transition-colors"
-              onClick={() => navigate('/income')}
+              className="flex items-center justify-between cursor-pointer hover:bg-orange-50 p-1 rounded transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/loans');
+              }}
             >
               <span className="text-xs text-muted-foreground flex items-center">
-                <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
-                Income
+                <TrendingDown className="h-3 w-3 text-orange-600 mr-1" />
+                Given
               </span>
-              <span className="text-sm font-medium text-green-600">{formatCurrency(summary.totalIncomeLastMonth)}</span>
+              <span className="text-sm font-medium text-orange-600">{formatCurrency(summary.totalLoansGiven)}</span>
             </div>
             <div 
-              className="flex items-center justify-between cursor-pointer hover:bg-red-50 p-1 rounded transition-colors"
-              onClick={() => navigate('/expenses')}
+              className="flex items-center justify-between cursor-pointer hover:bg-blue-50 p-1 rounded transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/loans');
+              }}
             >
               <span className="text-xs text-muted-foreground flex items-center">
-                <TrendingDown className="h-3 w-3 text-red-600 mr-1" />
-                Expense
+                <TrendingUp className="h-3 w-3 text-blue-600 mr-1" />
+                Taken
               </span>
-              <span className="text-sm font-medium text-red-600">{formatCurrency(summary.totalExpensesLastMonth)}</span>
+              <span className="text-sm font-medium text-blue-600">{formatCurrency(summary.totalLoansTaken)}</span>
             </div>
           </div>
         </CardContent>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAddIncome, useUpdateIncome, Income } from '@/hooks/useIncome';
-import { useCategories } from '@/hooks/useExpenses';
+import { useIncomeCategories } from '@/hooks/useExpenses';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,7 +22,7 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
 
   const addIncome = useAddIncome();
   const updateIncome = useUpdateIncome();
-  const { data: categories } = useCategories();
+  const { data: categories } = useIncomeCategories();
 
   const isEditing = !!income;
 

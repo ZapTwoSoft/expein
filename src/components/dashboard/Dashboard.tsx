@@ -3,13 +3,15 @@ import { ExpenseSummary } from './ExpenseSummary';
 import { IncomeExpenseChart } from './IncomeExpenseChart';
 import { TransactionList } from './TransactionList';
 import { Button } from '@/components/ui/button';
-import { TrendingDown, TrendingUp } from 'lucide-react';
+import { TrendingDown, TrendingUp, HandCoins } from 'lucide-react';
 import { ExpenseModal } from '@/components/expenses/ExpenseModal';
 import { IncomeModal } from '@/components/income/IncomeModal';
+import { LoanModal } from '@/components/loans/LoanModal';
 
 export function Dashboard() {
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
+  const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -23,25 +25,35 @@ export function Dashboard() {
           </p>
         </div>
         
-        {/* Quick Action Buttons */}
-        <div className="flex gap-2 sm:gap-3">
+        {/* Quick Action Buttons - 3 in a row on mobile, flex on desktop */}
+        <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-3">
           <Button 
             onClick={() => setIsExpenseModalOpen(true)}
             variant="outline"
-            className="flex items-center text-base sm:text-base h-12 sm:h-9 px-6 sm:px-4"
+            className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
           >
-            <TrendingDown className="h-4 w-4 sm:h-4 sm:w-4 mr-2 sm:mr-2" />
-            <span className="sm:hidden">Add Expense</span>
+            <TrendingDown className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline sm:hidden">Expense</span>
             <span className="hidden sm:inline">Add Expense</span>
           </Button>
           
           <Button 
             onClick={() => setIsIncomeModalOpen(true)}
-            className="flex items-center text-base sm:text-base h-12 sm:h-9 px-6 sm:px-4"
+            className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
           >
-            <TrendingUp className="h-4 w-4 sm:h-4 sm:w-4 mr-2 sm:mr-2" />
-            <span className="sm:hidden">Add Income</span>
+            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline sm:hidden">Income</span>
             <span className="hidden sm:inline">Add Income</span>
+          </Button>
+
+          <Button 
+            onClick={() => setIsLoanModalOpen(true)}
+            variant="secondary"
+            className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
+          >
+            <HandCoins className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline sm:hidden">Loan</span>
+            <span className="hidden sm:inline">Add Loan</span>
           </Button>
         </div>
       </div>
@@ -67,6 +79,11 @@ export function Dashboard() {
       <IncomeModal
         isOpen={isIncomeModalOpen}
         onClose={() => setIsIncomeModalOpen(false)}
+      />
+
+      <LoanModal
+        isOpen={isLoanModalOpen}
+        onClose={() => setIsLoanModalOpen(false)}
       />
     </div>
   );

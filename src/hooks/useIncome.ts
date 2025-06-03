@@ -16,6 +16,7 @@ export interface Income {
     name: string;
     icon: string | null;
     color: string | null;
+    type: string;
   };
 }
 
@@ -31,7 +32,8 @@ export function useIncome() {
             id,
             name,
             icon,
-            color
+            color,
+            type
           )
         `)
         .order('date', { ascending: false });

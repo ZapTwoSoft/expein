@@ -16,6 +16,7 @@ export interface Expense {
     name: string;
     icon: string | null;
     color: string | null;
+    type: string;
   };
 }
 
@@ -24,6 +25,7 @@ export interface Category {
   name: string;
   icon: string | null;
   color: string | null;
+  type: string;
   created_at: string | null;
 }
 
@@ -39,7 +41,8 @@ export function useExpenses() {
             id,
             name,
             icon,
-            color
+            color,
+            type
           )
         `)
         .order('date', { ascending: false });
@@ -52,11 +55,28 @@ export function useExpenses() {
 
 export function useCategories() {
   return useQuery({
-    queryKey: ['categories'],
+    queryKey: ['categories', 'expense'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('categories')
         .select('*')
+        .eq('type', 'expense')
+        .order('name');
+
+      if (error) throw error;
+      return data as Category[];
+    },
+  });
+}
+
+export function useIncomeCategories() {
+  return useQuery({
+    queryKey: ['categories', 'income'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('type', 'income')
         .order('name');
 
       if (error) throw error;

@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useUpdateIncome } from '@/hooks/useIncome';
-import { useCategories } from '@/hooks/useExpenses';
+import { useIncomeCategories } from '@/hooks/useExpenses';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,7 +20,7 @@ export function IncomeEditDialog({ income, onClose }: IncomeEditDialogProps) {
   const [date, setDate] = useState('');
 
   const updateIncome = useUpdateIncome();
-  const { data: categories } = useCategories();
+  const { data: categories } = useIncomeCategories();
 
   useEffect(() => {
     if (income) {
