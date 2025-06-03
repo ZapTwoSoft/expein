@@ -32,17 +32,17 @@ export function Dashboard() {
             variant="outline"
             className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
           >
-            <TrendingDown className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline sm:hidden">Expense</span>
+            <TrendingDown className="h-4 w-4 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline sm:hidden">- Expense</span>
             <span className="hidden sm:inline">Add Expense</span>
           </Button>
           
           <Button 
             onClick={() => setIsIncomeModalOpen(true)}
-            className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
+            className="flex items-center justify-center  text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
           >
-            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline sm:hidden">Income</span>
+            <TrendingUp className="h-4 w-4 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline sm:hidden">+ Income</span>
             <span className="hidden sm:inline">Add Income</span>
           </Button>
 
@@ -51,8 +51,8 @@ export function Dashboard() {
             variant="secondary"
             className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
           >
-            <HandCoins className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline sm:hidden">Loan</span>
+            <HandCoins className="h-4 w-4 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline sm:hidden">Lend Loans</span>
             <span className="hidden sm:inline">Add Loan</span>
           </Button>
         </div>
