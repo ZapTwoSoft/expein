@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter } from '@/components/ui/drawer';
 import { DatePickerFallback } from '@/components/ui/date-picker-fallback';
 
 interface LoanModalProps {
@@ -80,131 +80,141 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[450px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-lg sm:text-xl">
+    <Drawer open={isOpen} onOpenChange={onClose}>
+      <DrawerContent className="sm:max-w-[600px]">
+        <DrawerHeader className="pb-4">
+          <DrawerTitle className="text-xl font-semibold">
             {isEditing ? 'Edit Loan' : 'Add New Loan'}
-          </DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="amount" className="text-sm">Amount</Label>
+          </DrawerTitle>
+        </DrawerHeader>
+        
+        <div className="flex-1 overflow-auto modal-scrollbar p-4">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-4">
+              <div className="space-y-3">
+                <Label htmlFor="amount" className="text-base sm:text-sm font-medium">Amount</Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                  className="text-base sm:text-sm h-12 sm:h-10 px-4"
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="loan-type" className="text-base sm:text-sm font-medium">Type</Label>
+                <Select value={loanType} onValueChange={(value: 'given' | 'taken') => setLoanType(value)}>
+                  <SelectTrigger className="text-base sm:text-sm h-12 sm:h-10">
+                    <SelectValue placeholder="Select loan type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="given" className="text-base sm:text-sm">Given</SelectItem>
+                    <SelectItem value="taken" className="text-base sm:text-sm">Taken</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <Label htmlFor="borrower-lender" className="text-base sm:text-sm font-medium">
+                {loanType === 'given' ? 'Borrower Name' : 'Lender Name'}
+              </Label>
               <Input
-                id="amount"
-                type="number"
-                step="0.01"
-                placeholder="0.00"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                id="borrower-lender"
+                placeholder={loanType === 'given' ? 'Enter borrower name' : 'Enter lender name'}
+                value={borrowerLenderName}
+                onChange={(e) => setBorrowerLenderName(e.target.value)}
                 required
-                className="text-sm"
+                className="text-base sm:text-sm h-12 sm:h-10 px-4"
               />
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="loan-type" className="text-sm">Type</Label>
-              <Select value={loanType} onValueChange={(value: 'given' | 'taken') => setLoanType(value)}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue placeholder="Select loan type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="given" className="text-sm">Given</SelectItem>
-                  <SelectItem value="taken" className="text-sm">Taken</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="borrower-lender" className="text-sm">
-              {loanType === 'given' ? 'Borrower Name' : 'Lender Name'}
-            </Label>
-            <Input
-              id="borrower-lender"
-              placeholder={loanType === 'given' ? 'Enter borrower name' : 'Enter lender name'}
-              value={borrowerLenderName}
-              onChange={(e) => setBorrowerLenderName(e.target.value)}
-              required
-              className="text-sm"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm">Description</Label>
-            <Input
-              id="description"
-              placeholder="Enter loan description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              className="text-sm"
-            />
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div className="space-y-2">
-              <Label className="text-sm">Date</Label>
-              <DatePickerFallback
-                date={date}
-                onDateChange={setDate}
-                placeholder="Select loan date"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label className="text-sm">Due Date (Optional)</Label>
-              <DatePickerFallback
-                date={dueDate}
-                onDateChange={setDueDate}
-                placeholder="Select due date"
-              />
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="interest-rate" className="text-sm">Interest Rate (%) - Optional</Label>
+            <div className="space-y-3">
+              <Label htmlFor="description" className="text-base sm:text-sm font-medium">Description</Label>
               <Input
-                id="interest-rate"
-                type="number"
-                step="0.01"
-                placeholder="0.00"
-                value={interestRate}
-                onChange={(e) => setInterestRate(e.target.value)}
-                className="text-sm"
+                id="description"
+                placeholder="Enter loan description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                className="text-base sm:text-sm h-12 sm:h-10 px-4"
               />
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="status" className="text-sm">Status</Label>
-              <Select value={status} onValueChange={(value: 'active' | 'paid' | 'partially_paid') => setStatus(value)}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active" className="text-sm">Active</SelectItem>
-                  <SelectItem value="partially_paid" className="text-sm">Partially Paid</SelectItem>
-                  <SelectItem value="paid" className="text-sm">Paid</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-4">
+              <div className="space-y-3">
+                <Label className="text-base sm:text-sm font-medium">Date</Label>
+                <div className="h-12 sm:h-10">
+                  <DatePickerFallback
+                    date={date}
+                    onDateChange={setDate}
+                    placeholder="Select loan date"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <Label className="text-base sm:text-sm font-medium">Due Date (Optional)</Label>
+                <div className="h-12 sm:h-10">
+                  <DatePickerFallback
+                    date={dueDate}
+                    onDateChange={setDueDate}
+                    placeholder="Select due date"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-4">
+              <div className="space-y-3">
+                <Label htmlFor="interest-rate" className="text-base sm:text-sm font-medium">Interest Rate (%) - Optional</Label>
+                <Input
+                  id="interest-rate"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={interestRate}
+                  onChange={(e) => setInterestRate(e.target.value)}
+                  className="text-base sm:text-sm h-12 sm:h-10 px-4"
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="status" className="text-base sm:text-sm font-medium">Status</Label>
+                <Select value={status} onValueChange={(value: 'active' | 'paid' | 'partially_paid') => setStatus(value)}>
+                  <SelectTrigger className="text-base sm:text-sm h-12 sm:h-10">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active" className="text-base sm:text-sm">Active</SelectItem>
+                    <SelectItem value="partially_paid" className="text-base sm:text-sm">Partially Paid</SelectItem>
+                    <SelectItem value="paid" className="text-base sm:text-sm">Paid</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <DrawerFooter>
+          <div className="flex gap-3 sm:flex-row justify-end">
             <Button 
               type="button" 
-              variant="outline" 
+              variant="destructive" 
               onClick={onClose}
-              className="text-sm h-8 sm:h-9"
+              className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={addLoan.isPending || updateLoan.isPending}
-              className="text-sm h-8 sm:h-9"
+              onClick={handleSubmit}
+              className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
             >
               {addLoan.isPending || updateLoan.isPending 
                 ? (isEditing ? "Updating..." : "Adding...") 
@@ -212,8 +222,8 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
               }
             </Button>
           </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

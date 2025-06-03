@@ -29,7 +29,6 @@ export function AppSidebar() {
   const isActive = (path: string) => currentPath === path;
   const isCollapsed = state === 'collapsed';
 
-  // Close sidebar on mobile when navigation occurs
   useEffect(() => {
     if (isMobile) {
       setOpenMobile(false);
@@ -37,7 +36,6 @@ export function AppSidebar() {
   }, [location.pathname, isMobile, setOpenMobile]);
 
   const handleNavClick = () => {
-    // Close mobile sidebar when navigation item is clicked
     if (isMobile) {
       setOpenMobile(false);
     }

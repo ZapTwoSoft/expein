@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter } from '@/components/ui/drawer';
 import { DatePickerFallback } from '@/components/ui/date-picker-fallback';
 
 interface IncomeModalProps {
@@ -65,83 +65,91 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-lg sm:text-xl">
+    <Drawer open={isOpen} onOpenChange={onClose}>
+      <DrawerContent className="sm:max-w-[500px]">
+        <DrawerHeader className="pb-4">
+          <DrawerTitle className="text-xl font-semibold">
             {isEditing ? 'Edit Income' : 'Add New Income'}
-          </DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-1 gap-3 sm:gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="amount" className="text-sm">Amount</Label>
+          </DrawerTitle>
+        </DrawerHeader>
+        
+        <div className="flex-1 overflow-auto modal-scrollbar p-4">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-4">
+            <div className="grid grid-cols-1 gap-5 sm:gap-4">
+              <div className="space-y-3">
+                <Label htmlFor="amount" className="text-base sm:text-sm font-medium">Amount</Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                  className="text-base sm:text-sm h-12 sm:h-10 px-4"
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label className="text-base sm:text-sm font-medium">Date</Label>
+                <div className="h-12 sm:h-10">
+                  <DatePickerFallback
+                    date={date}
+                    onDateChange={setDate}
+                    placeholder="Select income date"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <Label htmlFor="description" className="text-base sm:text-sm font-medium">Description</Label>
               <Input
-                id="amount"
-                type="number"
-                step="0.01"
-                placeholder="0.00"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                id="description"
+                placeholder="Enter income description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 required
-                className="text-sm"
+                className="text-base sm:text-sm h-12 sm:h-10 px-4"
               />
             </div>
             
-            <div className="space-y-2">
-              <Label className="text-sm">Date</Label>
-              <DatePickerFallback
-                date={date}
-                onDateChange={setDate}
-                placeholder="Select income date"
-              />
+            <div className="space-y-3">
+              <Label htmlFor="category" className="text-base sm:text-sm font-medium">Category</Label>
+              <Select value={categoryId} onValueChange={setCategoryId}>
+                <SelectTrigger className="text-base sm:text-sm h-12 sm:h-10">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories?.map((category) => (
+                    <SelectItem key={category.id} value={category.id} className="text-base sm:text-sm">
+                      <div className="flex items-center">
+                        <span className="mr-2">{category.icon}</span>
+                        {category.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm">Description</Label>
-            <Input
-              id="description"
-              placeholder="Enter income description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              className="text-sm"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="category" className="text-sm">Category</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger className="text-sm">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories?.map((category) => (
-                  <SelectItem key={category.id} value={category.id} className="text-sm">
-                    <div className="flex items-center">
-                      <span className="mr-2">{category.icon}</span>
-                      {category.name}
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
+          </form>
+        </div>
+        
+        <DrawerFooter>
+          <div className="flex gap-3 sm:flex-row justify-end">
             <Button 
               type="button" 
-              variant="outline" 
+              variant="destructive" 
               onClick={onClose}
-              className="text-sm h-8 sm:h-9"
+              className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={addIncome.isPending || updateIncome.isPending}
-              className="text-sm h-8 sm:h-9"
+              onClick={handleSubmit}
+              className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
             >
               {addIncome.isPending || updateIncome.isPending 
                 ? (isEditing ? "Updating..." : "Adding...") 
@@ -149,8 +157,8 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
               }
             </Button>
           </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

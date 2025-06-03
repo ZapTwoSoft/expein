@@ -120,7 +120,7 @@ function AppContent() {
           </header>
           
           <main className="flex-1 bg-background overflow-auto">
-            <div className="container mx-auto p-4 md:p-6 lg:p-8">
+            <div className="p-4 md:p-6 lg:p-8 max-w-7xl">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/expenses" element={<ExpensesPage />} />

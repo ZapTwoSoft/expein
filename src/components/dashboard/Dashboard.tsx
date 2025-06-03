@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ExpenseSummary } from './ExpenseSummary';
 import { IncomeExpenseChart } from './IncomeExpenseChart';
+import { TransactionList } from './TransactionList';
 import { Button } from '@/components/ui/button';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { ExpenseModal } from '@/components/expenses/ExpenseModal';
@@ -27,19 +28,19 @@ export function Dashboard() {
           <Button 
             onClick={() => setIsExpenseModalOpen(true)}
             variant="outline"
-            className="flex items-center text-sm sm:text-base h-8 sm:h-9 px-3 sm:px-4"
+            className="flex items-center text-base sm:text-base h-12 sm:h-9 px-6 sm:px-4"
           >
-            <TrendingDown className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="sm:hidden">Expense</span>
+            <TrendingDown className="h-4 w-4 sm:h-4 sm:w-4 mr-2 sm:mr-2" />
+            <span className="sm:hidden">Add Expense</span>
             <span className="hidden sm:inline">Add Expense</span>
           </Button>
           
           <Button 
             onClick={() => setIsIncomeModalOpen(true)}
-            className="flex items-center text-sm sm:text-base h-8 sm:h-9 px-3 sm:px-4"
+            className="flex items-center text-base sm:text-base h-12 sm:h-9 px-6 sm:px-4"
           >
-            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="sm:hidden">Income</span>
+            <TrendingUp className="h-4 w-4 sm:h-4 sm:w-4 mr-2 sm:mr-2" />
+            <span className="sm:hidden">Add Income</span>
             <span className="hidden sm:inline">Add Income</span>
           </Button>
         </div>
@@ -47,7 +48,15 @@ export function Dashboard() {
 
       <ExpenseSummary />
 
-      <IncomeExpenseChart />
+      {/* Chart and Transaction List Side by Side */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="lg:col-span-2">
+          <IncomeExpenseChart />
+        </div>
+        <div className="lg:col-span-1">
+          <TransactionList />
+        </div>
+      </div>
 
       {/* Modals */}
       <ExpenseModal

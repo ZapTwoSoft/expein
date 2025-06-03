@@ -41,13 +41,38 @@ const DrawerContent = React.forwardRef<
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
+        // Base styles
+        "fixed z-50 flex bg-background border",
+        
+        // Mobile: Bottom drawer
+        "inset-x-0 bottom-0 mt-24 h-auto flex-col rounded-t-[10px]",
+        "max-h-[90vh] overflow-hidden",
+        
+        // Desktop: Right drawer  
+        "sm:inset-y-0 sm:right-0 sm:left-auto sm:bottom-auto sm:mt-0",
+        "sm:h-full sm:w-[500px] sm:max-w-[50vw] sm:rounded-l-[10px] sm:rounded-t-none",
+        "sm:flex-col sm:max-h-none",
+        
         className
       )}
       {...props}
     >
-      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
-      {children}
+      {/* Mobile drag handle */}
+      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted sm:hidden" />
+      
+      {/* Desktop close area */}
+      <div className="hidden sm:block sm:absolute sm:top-4 sm:right-4">
+        <DrawerPrimitive.Close className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground h-6 w-6 flex items-center justify-center">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+          <span className="sr-only">Close</span>
+        </DrawerPrimitive.Close>
+      </div>
+      
+      <div className="flex flex-col h-full min-h-0">
+        {children}
+      </div>
     </DrawerPrimitive.Content>
   </DrawerPortal>
 ))
@@ -58,7 +83,7 @@ const DrawerHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("grid gap-1.5 p-4 text-center sm:text-left", className)}
+    className={cn("grid gap-1.5 p-4 text-center sm:text-left flex-shrink-0", className)}
     {...props}
   />
 )
@@ -69,7 +94,7 @@ const DrawerFooter = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("mt-auto flex flex-col gap-2 p-4", className)}
+    className={cn("mt-auto flex flex-col gap-2 p-4 flex-shrink-0", className)}
     {...props}
   />
 )
