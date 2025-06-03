@@ -11,6 +11,7 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { ExpensesPage } from "@/pages/ExpensesPage";
 import { IncomePage } from "@/pages/IncomePage";
 import { LoansPage } from "@/pages/LoansPage";
+import { AdminPage } from "@/pages/AdminPage";
 import NotFound from "./pages/NotFound";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,6 +41,8 @@ function AppContent() {
         return 'Income';
       case '/loans':
         return 'Loans';
+      case '/admin':
+        return 'Admin Panel';
       default:
         return 'Page Not Found';
     }
@@ -126,6 +129,7 @@ function AppContent() {
                 <Route path="/expenses" element={<ExpensesPage />} />
                 <Route path="/income" element={<IncomePage />} />
                 <Route path="/loans" element={<LoansPage />} />
+                <Route path="/admin" element={<AdminPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

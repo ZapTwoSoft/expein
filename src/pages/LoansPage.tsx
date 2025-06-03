@@ -33,16 +33,16 @@ export function LoansPage() {
         </div>
         <Button 
           onClick={() => setIsModalOpen(true)} 
-          className="flex items-center text-sm sm:text-base h-8 sm:h-9 px-3 sm:px-4"
+          className="flex items-center text-sm sm:text-base h-8 sm:h-9 px-3 sm:px-4 p-5"
         >
           <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-          <span className="sm:hidden">Add</span>
+          <span className="sm:hidden">Add Loan</span>
           <span className="hidden sm:inline">Add Loan</span>
         </Button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-xs sm:text-sm font-medium">Total Given</CardTitle>
@@ -71,17 +71,6 @@ export function LoansPage() {
           </CardHeader>
           <CardContent>
             <div className="text-lg sm:text-2xl font-bold">{activeLoans}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium">Net Balance</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-lg sm:text-2xl font-bold ${netBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              ৳{netBalance.toLocaleString()}
-            </div>
           </CardContent>
         </Card>
       </div>

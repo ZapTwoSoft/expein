@@ -26,10 +26,10 @@ export function ExpensesPage() {
         </div>
         <Button 
           onClick={() => setIsModalOpen(true)} 
-          className="flex items-center text-sm sm:text-base h-8 sm:h-9 px-3 sm:px-4"
+          className="flex items-center text-sm sm:text-base h-8 sm:h-9 px-3 sm:px-4 p-5"
         >
           <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-          <span className="sm:hidden">Add</span>
+          <span className="sm:hidden">Add Expense</span>
           <span className="hidden sm:inline">Add Expense</span>
         </Button>
       </div>

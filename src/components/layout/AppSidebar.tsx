@@ -1,6 +1,7 @@
-import { Home, TrendingDown, TrendingUp, HandCoins } from 'lucide-react';
+import { Home, TrendingDown, TrendingUp, HandCoins, Settings } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +15,9 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 
+// Hard-coded admin email - should match AdminPage.tsx
+const ADMIN_EMAIL = 'alkemy48@gmail.com';
+
 const items = [
   { title: 'Dashboard', url: '/', icon: Home },
   { title: 'Expenses', url: '/expenses', icon: TrendingDown },
@@ -22,12 +26,14 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { user } = useAuth();
   const location = useLocation();
   const { state, setOpenMobile, isMobile } = useSidebar();
   const currentPath = location.pathname;
 
   const isActive = (path: string) => currentPath === path;
   const isCollapsed = state === 'collapsed';
+  const isAdmin = user?.email === ADMIN_EMAIL;
 
   useEffect(() => {
     if (isMobile) {
@@ -44,17 +50,19 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center gap-2">
-          <div className="flex !h-8 !w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <span className="text-sm font-bold !h-8 !w-8 flex items-center justify-center">E</span>
-          </div>
-          {!isCollapsed && (
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">Expein</span>
-              <span className="truncate text-xs">Financial Management</span>
+        <NavLink to="/" onClick={handleNavClick} className="block">
+          <div className="flex items-center gap-2 hover:bg-accent hover:text-accent-foreground rounded-md p-2 transition-colors">
+            <div className="flex !h-8 !w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <span className="text-sm font-bold !h-8 !w-8 flex items-center justify-center">E</span>
             </div>
-          )}
-        </div>
+            {!isCollapsed && (
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">Expein</span>
+                <span className="truncate text-xs">Financial Management</span>
+              </div>
+            )}
+          </div>
+        </NavLink>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -74,6 +82,25 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Admin Section - Only show for admin users */}
+        {isAdmin && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild isActive={isActive('/admin')} tooltip="Admin Panel">
+                    <NavLink to="/admin" onClick={handleNavClick}>
+                      <Settings />
+                      <span>Admin Panel</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
     </Sidebar>
   );
