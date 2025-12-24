@@ -1,7 +1,7 @@
-# 🚀 SpendScribe UX Improvements Roadmap
+# 🚀 Expein UX Improvements Roadmap
 
 ## Overview
-This document outlines comprehensive UX improvements for the SpendScribe financial management application to enhance user experience, engagement, and overall usability.
+This document outlines comprehensive UX improvements for the Expein financial management application to enhance user experience, engagement, and overall usability.
 
 ---
 

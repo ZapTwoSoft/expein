@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +17,7 @@ import { SavingsPage } from "@/pages/SavingsPage";
 import { LoansPage } from "@/pages/LoansPage";
 import { AdminPage } from "@/pages/AdminPage";
 import NotFound from "./pages/NotFound";
+import { SplashScreen } from "@/components/SplashScreen";
 
 const queryClient = new QueryClient();
 
@@ -74,11 +76,29 @@ function AppContent() {
 }
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    // Check if this is the first visit or a fresh page load
+    const hasVisited = sessionStorage.getItem('hasVisited');
+    
+    if (hasVisited) {
+      setShowSplash(false);
+    } else {
+      sessionStorage.setItem('hasVisited', 'true');
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
           <BrowserRouter>
+            {showSplash && <SplashScreen />}
             <AppContent />
             <Toaster />
             <Sonner />
