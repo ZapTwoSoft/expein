@@ -97,6 +97,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
               <Input
                 id="amount"
                 type="number"
+                inputMode="decimal"
                 step="0.01"
                 placeholder="0.00"
                 value={amount}
@@ -180,6 +181,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
               <Input
                 id="interest-rate"
                 type="number"
+                inputMode="decimal"
                 step="0.01"
                 placeholder="0.00 (optional)"
                 value={interestRate}
