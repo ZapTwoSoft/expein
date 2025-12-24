@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
@@ -49,6 +49,11 @@ function AppContent() {
         
         <main className="flex-1 bg-[#12141a] overflow-auto">
           <div className="p-4 md:p-6 lg:p-8 max-w-[1400px]">
+            {/* Mobile hamburger menu button */}
+            <div className="mb-4 md:hidden">
+              <SidebarTrigger className="text-white hover:bg-white/10" />
+            </div>
+            
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />

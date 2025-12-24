@@ -1,7 +1,8 @@
 import { Home, TrendingDown, TrendingUp, HandCoins, PiggyBank, Settings, LogOut, User } from 'lucide-react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from '@/hooks/use-toast';
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +41,7 @@ const items = [
 export function AppSidebar() {
   const { user, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const { state, setOpenMobile, isMobile } = useSidebar();
   const currentPath = location.pathname;
 
@@ -78,6 +80,20 @@ export function AppSidebar() {
   const handleNavClick = () => {
     if (isMobile) {
       setOpenMobile(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/', { replace: true });
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to sign out. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -173,7 +189,7 @@ export function AppSidebar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-white/10" />
-              <DropdownMenuItem onClick={signOut} className="cursor-pointer text-red-400 focus:text-red-400 focus:bg-white/5">
+              <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-400 focus:text-red-400 focus:bg-white/5">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
@@ -204,7 +220,7 @@ export function AppSidebar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-white/10" />
-              <DropdownMenuItem onClick={signOut} className="text-red-400 focus:text-red-400 focus:bg-white/5">
+              <DropdownMenuItem onClick={handleSignOut} className="text-red-400 focus:text-red-400 focus:bg-white/5">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
