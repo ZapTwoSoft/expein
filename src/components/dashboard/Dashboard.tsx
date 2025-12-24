@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ExpenseSummary } from './ExpenseSummary';
 import { IncomeExpenseChart } from './IncomeExpenseChart';
 import { TransactionList } from './TransactionList';
+import { CategoryExpenseChart } from './CategoryExpenseChart';
 import { Button } from '@/components/ui/button';
 import { TrendingDown, TrendingUp, HandCoins, PiggyBank } from 'lucide-react';
 import { ExpenseModal } from '@/components/expenses/ExpenseModal';
@@ -70,15 +71,18 @@ export function Dashboard() {
 
       <ExpenseSummary dateRange={dateRange} onDateRangeChange={setDateRange} />
 
-      {/* Chart and Transaction List Side by Side */}
+      {/* Charts Row - Income/Expense Trend and Category Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2">
           <IncomeExpenseChart />
         </div>
         <div className="lg:col-span-1">
-          <TransactionList />
+          <CategoryExpenseChart />
         </div>
       </div>
+
+      {/* Recent Transactions - Full Width */}
+      <TransactionList />
 
       {/* Modals */}
       <ExpenseModal

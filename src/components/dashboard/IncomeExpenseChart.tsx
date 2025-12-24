@@ -91,11 +91,11 @@ export function IncomeExpenseChart() {
           <CardTitle className="text-sm sm:text-lg font-semibold text-white">
             Income vs Expenses Trend
           </CardTitle>
-          <DateRangePicker
+          {/* <DateRangePicker
             date={dateRange}
             onDateChange={setDateRange}
             className="w-full sm:w-auto"
-          />
+          /> */}
         </div>
       </CardHeader>
       <CardContent className="px-2 sm:px-6 py-2 sm:py-6">

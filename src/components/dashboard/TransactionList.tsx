@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SkeletonList } from '@/components/ui/skeleton';
 import { TrendingUp, TrendingDown, HandCoins } from 'lucide-react';
 import { format } from 'date-fns';
+import { formatCurrency } from '@/lib/utils';
 
 interface Transaction {
   id: string;
@@ -74,12 +75,6 @@ export function TransactionList() {
     ).slice(0, 15); // Show more transactions since we now have loans too
   }, [expenses, income, loans]);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'BDT',
-    }).format(amount);
-  };
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
@@ -160,50 +155,54 @@ export function TransactionList() {
         </CardTitle>
       </CardHeader>
       <CardContent className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-6">
-        <div className="h-[250px] sm:h-[350px] lg:h-[400px] overflow-y-auto space-y-2 sm:space-y-3 pr-2 thin-scrollbar">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {transactions.length === 0 ? (
-            <div className="text-center py-6 sm:py-8 text-gray-400">
+            <div className="col-span-full text-center py-6 sm:py-8 text-gray-400">
               <p className="text-sm sm:text-base">No transactions found</p>
               <p className="text-xs sm:text-sm mt-1">Start by adding some income, expenses, or loans</p>
             </div>
           ) : (
-            transactions.map((transaction) => (
+            transactions.slice(0, 9).map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-start sm:items-center justify-between p-2 sm:p-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors"
+                className="flex flex-col p-3 sm:p-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors h-full"
               >
-                <div className="flex items-start sm:items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
-                  <div className={`p-1.5 sm:p-2 rounded-full flex-shrink-0 ${getTransactionColor(transaction.type)}`}>
+                <div className="flex items-start justify-between mb-3">
+                  <div className={`p-2 rounded-full flex-shrink-0 ${getTransactionColor(transaction.type)}`}>
                     {getTransactionIcon(transaction.type)}
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs sm:text-sm font-medium text-white truncate leading-tight">
-                      {transaction.description}
+                  <div className="text-right ml-2">
+                    <p className={`font-bold text-sm sm:text-base ${getTransactionAmountColor(transaction.type)}`}>
+                      {(transaction.type === 'income' || transaction.type === 'loan_taken') ? '+' : '-'}
+                      {formatCurrency(transaction.amount).replace('BDT ', '')}
                     </p>
-                    <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs text-gray-400 mt-1">
-                      <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/10 rounded-full text-xs whitespace-nowrap">
-                        {getTransactionLabel(transaction.type)}
-                      </span>
-                      {transaction.category && (
-                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/10 rounded-full text-xs whitespace-nowrap">
-                          {transaction.category}
-                        </span>
-                      )}
-                      {transaction.loanInfo && (
-                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/10 rounded-full text-xs whitespace-nowrap">
-                          {transaction.loanInfo.borrowerLenderName}
-                        </span>
-                      )}
-                      <span className="text-xs whitespace-nowrap">
-                        {format(new Date(transaction.date), 'MMM dd, yyyy')}
-                      </span>
-                    </div>
                   </div>
                 </div>
-                <div className="text-right flex-shrink-0 ml-2">
-                  <p className={`font-semibold text-xs sm:text-sm ${getTransactionAmountColor(transaction.type)}`}>
-                    {(transaction.type === 'income' || transaction.type === 'loan_taken') ? '+' : '-'}{formatCurrency(transaction.amount)}
+                
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-white mb-2 line-clamp-2">
+                    {transaction.description}
                   </p>
+                  
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs text-gray-400">
+                    <span className="px-2 py-1 bg-white/10 rounded-full text-xs">
+                      {getTransactionLabel(transaction.type)}
+                    </span>
+                    {transaction.category && (
+                      <span className="px-2 py-1 bg-white/10 rounded-full text-xs">
+                        {transaction.category}
+                      </span>
+                    )}
+                    {transaction.loanInfo && (
+                      <span className="px-2 py-1 bg-white/10 rounded-full text-xs">
+                        {transaction.loanInfo.borrowerLenderName}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="text-xs text-gray-500 mt-2 pt-2 border-t border-white/10">
+                  {format(new Date(transaction.date), 'MMM dd, yyyy')}
                 </div>
               </div>
             ))
