@@ -79,14 +79,14 @@ export function LoginPage() {
       <div className="w-full max-w-sm relative z-10">
         <div className="flex flex-col space-y-6">
           {/* Header */}
-          <div className="flex flex-col space-y-2 text-center">
-            <div className="mx-auto">
+          <div className="flex flex-col space-y-2 text-center sm:text-left w-full justify-center items-center sm:items-start">
+            <div className="">
               <span className="text-3xl text-brand font-bold">Expein.</span>
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-white">
+            <h1 className="text-2xl font-semibold tracking-tight text-white text-center sm:text-left">
               Welcome back
             </h1>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-400 text-center sm:text-left">
               Enter your email to sign in to your account
             </p>
           </div>
