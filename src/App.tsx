@@ -12,6 +12,7 @@ import { Dashboard } from "@/components/dashboard/Dashboard";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { ExpensesPage } from "@/pages/ExpensesPage";
 import { IncomePage } from "@/pages/IncomePage";
+import { SavingsPage } from "@/pages/SavingsPage";
 import { LoansPage } from "@/pages/LoansPage";
 import { AdminPage } from "@/pages/AdminPage";
 import NotFound from "./pages/NotFound";
@@ -42,6 +43,8 @@ function AppContent() {
         return 'Expenses';
       case '/income':
         return 'Income';
+      case '/savings':
+        return 'Savings';
       case '/loans':
         return 'Loans';
       case '/admin':
@@ -139,6 +142,7 @@ function AppContent() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/expenses" element={<ExpensesPage />} />
                 <Route path="/income" element={<IncomePage />} />
+                <Route path="/savings" element={<SavingsPage />} />
                 <Route path="/loans" element={<LoansPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/login" element={<Navigate to="/dashboard" replace />} />

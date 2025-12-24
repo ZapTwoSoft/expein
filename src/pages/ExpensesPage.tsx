@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatCurrencyWithCommas } from '@/lib/utils';
 
 export function ExpensesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +43,7 @@ export function ExpensesPage() {
           </CardHeader>
           <CardContent>
             <div className="text-lg sm:text-2xl font-bold text-red-400">
-              ৳{totalExpenses.toLocaleString()}
+              {formatCurrencyWithCommas(totalExpenses)}
             </div>
           </CardContent>
         </Card>
@@ -62,7 +63,7 @@ export function ExpensesPage() {
           </CardHeader>
           <CardContent>
             <div className="text-lg sm:text-2xl font-bold text-white">
-              ৳{expenseCount > 0 ? (totalExpenses / expenseCount).toFixed(2) : '0.00'}
+              {formatCurrencyWithCommas(expenseCount > 0 ? totalExpenses / expenseCount : 0)}
             </div>
           </CardContent>
         </Card>

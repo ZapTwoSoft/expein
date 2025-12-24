@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Plus, HandCoins, TrendingDown, TrendingUp } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatCurrencyWithCommas } from '@/lib/utils';
 
 export function LoansPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,7 +50,7 @@ export function LoansPage() {
           </CardHeader>
           <CardContent>
             <div className="text-lg sm:text-2xl font-bold text-brand">
-              ৳{totalGiven.toLocaleString()}
+              {formatCurrencyWithCommas(totalGiven)}
             </div>
           </CardContent>
         </Card>
@@ -60,7 +61,7 @@ export function LoansPage() {
           </CardHeader>
           <CardContent>
             <div className="text-lg sm:text-2xl font-bold text-red-400">
-              ৳{totalTaken.toLocaleString()}
+              {formatCurrencyWithCommas(totalTaken)}
             </div>
           </CardContent>
         </Card>

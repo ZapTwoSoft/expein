@@ -2,25 +2,29 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useIncome } from '@/hooks/useIncome';
+import { useSavings } from '@/hooks/useSavings';
 import { useLoans } from '@/hooks/useLoans';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SkeletonSummaryCard } from '@/components/ui/skeleton';
-import { TrendingUp, TrendingDown, DollarSign, Calendar, HandCoins } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, PiggyBank, HandCoins } from 'lucide-react';
+import { formatCurrency } from '@/lib/utils';
 
 export function ExpenseSummary() {
   const { data: expenses, isLoading: expensesLoading } = useExpenses();
   const { data: income, isLoading: incomeLoading } = useIncome();
+  const { data: savings, isLoading: savingsLoading } = useSavings();
   const { data: loans, isLoading: loansLoading } = useLoans();
   const navigate = useNavigate();
 
-  const isLoading = expensesLoading || incomeLoading || loansLoading;
+  const isLoading = expensesLoading || incomeLoading || savingsLoading || loansLoading;
 
   const summary = useMemo(() => {
-    if (!expenses && !income && !loans) return { 
+    if (!expenses && !income && !savings && !loans) return { 
       totalExpensesThisMonth: 0, 
       totalExpensesLastMonth: 0, 
       totalIncomeThisMonth: 0, 
       totalIncomeLastMonth: 0,
+      totalSavings: 0,
       totalLoansGiven: 0,
       totalLoansTaken: 0
     };
@@ -107,28 +111,27 @@ export function ExpenseSummary() {
       ?.filter(loan => loan.loan_type === 'taken')
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
+    // Calculate total savings (all time)
+    const totalSavings = savings
+      ?.reduce((sum, saving) => sum + saving.amount, 0) || 0;
+
     return {
       totalExpensesThisMonth: totalExpensesThisMonth + givenLoansThisMonth,
       totalExpensesLastMonth: totalExpensesLastMonth + givenLoansLastMonth,
       totalIncomeThisMonth: totalIncomeThisMonth + takenLoansThisMonth,
       totalIncomeLastMonth: totalIncomeLastMonth + takenLoansLastMonth,
+      totalSavings,
       totalLoansGiven,
       totalLoansTaken
     };
-  }, [expenses, income, loans]);
+  }, [expenses, income, savings, loans]);
 
   const remainingAmount = summary.totalIncomeThisMonth - summary.totalExpensesThisMonth;
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'BDT',
-    }).format(amount);
-  };
-
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
+        <SkeletonSummaryCard />
         <SkeletonSummaryCard />
         <SkeletonSummaryCard />
         <SkeletonSummaryCard />
@@ -138,7 +141,7 @@ export function ExpenseSummary() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 animate-in fade-in duration-500">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6 animate-in fade-in duration-500">
       {/* Card 1: Expense This Month */}
       <Card 
         className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
@@ -175,10 +178,28 @@ export function ExpenseSummary() {
         </CardContent>
       </Card>
 
-      {/* Card 3: Remaining Amount */}
+      {/* Card 3: Total Savings */}
+      <Card 
+        className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
+        style={{ backgroundColor: '#3b82f6', opacity: 1 }}
+        onClick={() => navigate('/savings')}
+      >
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium text-white/80">Total Savings</CardTitle>
+          <PiggyBank className="h-4 w-4 text-white/80" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold text-white">{formatCurrency(summary.totalSavings)}</div>
+          <p className="text-xs text-white/70">
+            All time savings
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Card 4: Remaining Amount */}
       <Card 
         className="border-none shadow-lg"
-        style={{ backgroundColor: remainingAmount >= 0 ? '#3b82f6' : '#f97316', opacity: 1 }}
+        style={{ backgroundColor: remainingAmount >= 0 ? '#10b981' : '#f97316', opacity: 1 }}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-white/80">Remaining Amount</CardTitle>
@@ -194,7 +215,7 @@ export function ExpenseSummary() {
         </CardContent>
       </Card>
 
-      {/* Card 4: Loans Given & Taken */}
+      {/* Card 5: Loans Given & Taken */}
       <Card 
         className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
         style={{ backgroundColor: '#a855f7', opacity: 1 }}
