@@ -19,7 +19,7 @@ import {
 const ADMIN_EMAIL = 'alkemy48@gmail.com';
 
 const items = [
-  { title: 'Dashboard', url: '/', icon: Home },
+  { title: 'Dashboard', url: '/dashboard', icon: Home },
   { title: 'Expenses', url: '/expenses', icon: TrendingDown },
   { title: 'Income', url: '/income', icon: TrendingUp },
   { title: 'Loans', url: '/loans', icon: HandCoins },
@@ -31,7 +31,12 @@ export function AppSidebar() {
   const { state, setOpenMobile, isMobile } = useSidebar();
   const currentPath = location.pathname;
 
-  const isActive = (path: string) => currentPath === path;
+  const isActive = (path: string) => {
+    if (path === '/dashboard') {
+      return currentPath === '/' || currentPath === '/dashboard';
+    }
+    return currentPath === path;
+  };
   const isCollapsed = state === 'collapsed';
   const isAdmin = user?.email === ADMIN_EMAIL;
 
@@ -50,7 +55,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <NavLink to="/" onClick={handleNavClick} className="block">
+        <NavLink to="/dashboard" onClick={handleNavClick} className="block">
           <div className="flex items-center gap-2 hover:bg-accent hover:text-accent-foreground rounded-md  transition-colors">
             <div className="flex !h-8 !w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <span className="text-sm font-bold !h-8 !w-8 flex items-center justify-center">E</span>

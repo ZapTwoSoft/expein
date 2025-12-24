@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-route
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { LoginPage } from "@/pages/LoginPage";
 import { SignupPage } from "@/pages/SignupPage";
+import LandingPage from "@/pages/LandingPage";
 import { Dashboard } from "@/components/dashboard/Dashboard";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { ExpensesPage } from "@/pages/ExpensesPage";
@@ -35,6 +36,7 @@ function AppContent() {
   const getPageTitle = () => {
     switch (location.pathname) {
       case '/':
+      case '/dashboard':
         return 'Dashboard';
       case '/expenses':
         return 'Expenses';
@@ -77,9 +79,10 @@ function AppContent() {
   if (!user) {
     return (
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
   }
@@ -133,12 +136,13 @@ function AppContent() {
             <div className="p-4 md:p-6 lg:p-8 max-w-7xl">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/expenses" element={<ExpensesPage />} />
                 <Route path="/income" element={<IncomePage />} />
                 <Route path="/loans" element={<LoansPage />} />
                 <Route path="/admin" element={<AdminPage />} />
-                <Route path="/login" element={<Navigate to="/" replace />} />
-                <Route path="/signup" element={<Navigate to="/" replace />} />
+                <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/signup" element={<Navigate to="/dashboard" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
