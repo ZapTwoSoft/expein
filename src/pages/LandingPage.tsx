@@ -153,10 +153,10 @@ export default function LandingPage() {
                       {/* Balance Card */}
                       <div className="bg-gradient-to-br from-brand to-brand-400 rounded-2xl p-5 mb-5 shadow-lg">
                         <div className="text-xs text-black/60 mb-1">Remaining cash</div>
-                        <div className="text-3xl font-bold text-black mb-2">2,351.31 USD</div>
+                        <div className="text-3xl font-bold text-black mb-2">৳2,351.31</div>
                         <div className="flex items-center justify-between">
                           <div className="text-[11px] text-black/60">
-                            Spending limit: <span className="text-black font-semibold">10,000.00 USD</span>
+                            Spending limit: <span className="text-black font-semibold">৳10,000.00</span>
                           </div>
                           <svg className="w-4 h-4 text-black/30" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
