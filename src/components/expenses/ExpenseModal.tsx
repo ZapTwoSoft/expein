@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAddExpense, useUpdateExpense, useCategories, Expense } from '@/hooks/useExpenses';
+import { useFinancialValidation } from '@/hooks/useFinancialValidation';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalFooter } from '@/components/ui/responsive-modal';
 import { DatePicker } from '@/components/ui/date-picker';
+import { formatCurrency } from '@/lib/utils';
 
 interface ExpenseModalProps {
   isOpen: boolean;
@@ -19,10 +22,13 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState<string>('');
   const [date, setDate] = useState<Date>(new Date());
+  const [validationError, setValidationError] = useState<string>('');
 
   const addExpense = useAddExpense();
   const updateExpense = useUpdateExpense();
   const { data: categories } = useCategories();
+  const { validateTransaction, financialSummary } = useFinancialValidation();
+  const { toast } = useToast();
 
   const isEditing = !!expense;
 
@@ -38,12 +44,48 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
       setCategoryId('');
       setDate(new Date());
     }
-  }, [expense]);
+    setValidationError('');
+  }, [expense, isOpen]);
+
+  // Validate amount on change
+  useEffect(() => {
+    if (amount && parseFloat(amount) > 0) {
+      const validation = validateTransaction(
+        parseFloat(amount), 
+        'expense',
+        isEditing ? expense?.id : undefined
+      );
+      if (!validation.isValid) {
+        setValidationError(validation.message);
+      } else {
+        setValidationError('');
+      }
+    } else {
+      setValidationError('');
+    }
+  }, [amount, validateTransaction, isEditing, expense, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!amount || !description || !date) return;
+
+    // Validate before submitting
+    const validation = validateTransaction(
+      parseFloat(amount), 
+      'expense',
+      isEditing ? expense?.id : undefined
+    );
+    
+    if (!validation.isValid) {
+      setValidationError(validation.message);
+      toast({
+        title: "Insufficient Balance",
+        description: validation.message,
+        variant: "destructive",
+      });
+      return;
+    }
 
     const expenseData = {
       amount: parseFloat(amount),
@@ -66,6 +108,7 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
     setDescription('');
     setCategoryId('');
     setDate(new Date());
+    setValidationError('');
 
     onClose();
   };
@@ -79,6 +122,16 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
     >
       <ResponsiveModalContent>
         <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-4">
+          {/* Available Balance Display */}
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-400">Available Balance:</span>
+              <span className={`text-base font-semibold ${financialSummary.availableBalance >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {formatCurrency(financialSummary.availableBalance)}
+              </span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 gap-5 sm:gap-4">
             <div className="space-y-2">
               <Label htmlFor="amount" className="text-base sm:text-sm font-medium">
@@ -156,7 +209,7 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
         </Button>
         <Button 
           type="submit" 
-          disabled={addExpense.isPending || updateExpense.isPending}
+          disabled={addExpense.isPending || updateExpense.isPending || !!validationError}
           onClick={handleSubmit}
           className="flex-1 text-base sm:text-sm h-14 sm:h-10 px-6 font-medium"
         >

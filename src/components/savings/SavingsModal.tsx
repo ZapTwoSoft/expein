@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useAddSaving, useUpdateSaving, Saving } from '@/hooks/useSavings';
+import { useFinancialValidation } from '@/hooks/useFinancialValidation';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalFooter } from '@/components/ui/responsive-modal';
 import { DatePicker } from '@/components/ui/date-picker';
+import { formatCurrency } from '@/lib/utils';
 
 interface SavingsModalProps {
   isOpen: boolean;
@@ -19,9 +22,12 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
   const [goalName, setGoalName] = useState('');
   const [goalAmount, setGoalAmount] = useState('');
   const [date, setDate] = useState<Date>(new Date());
+  const [validationError, setValidationError] = useState<string>('');
 
   const addSaving = useAddSaving();
   const updateSaving = useUpdateSaving();
+  const { validateTransaction, financialSummary } = useFinancialValidation();
+  const { toast } = useToast();
 
   const isEditing = !!saving;
 
@@ -39,12 +45,48 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
       setGoalAmount('');
       setDate(new Date());
     }
-  }, [saving]);
+    setValidationError('');
+  }, [saving, isOpen]);
+
+  // Validate amount on change
+  useEffect(() => {
+    if (amount && parseFloat(amount) > 0) {
+      const validation = validateTransaction(
+        parseFloat(amount), 
+        'saving',
+        isEditing ? saving?.id : undefined
+      );
+      if (!validation.isValid) {
+        setValidationError(validation.message);
+      } else {
+        setValidationError('');
+      }
+    } else {
+      setValidationError('');
+    }
+  }, [amount, validateTransaction, isEditing, saving, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!amount || !description || !date) return;
+
+    // Validate before submitting
+    const validation = validateTransaction(
+      parseFloat(amount), 
+      'saving',
+      isEditing ? saving?.id : undefined
+    );
+    
+    if (!validation.isValid) {
+      setValidationError(validation.message);
+      toast({
+        title: "Insufficient Balance",
+        description: validation.message,
+        variant: "destructive",
+      });
+      return;
+    }
 
     const savingData = {
       amount: parseFloat(amount),
@@ -69,6 +111,7 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
     setGoalName('');
     setGoalAmount('');
     setDate(new Date());
+    setValidationError('');
 
     onClose();
   };
@@ -82,6 +125,16 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
     >
       <ResponsiveModalContent>
         <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-4">
+          {/* Available Balance Display */}
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-400">Available Balance:</span>
+              <span className={`text-base font-semibold ${financialSummary.availableBalance >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {formatCurrency(financialSummary.availableBalance)}
+              </span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 gap-5 sm:gap-4">
             <div className="space-y-2">
               <Label htmlFor="amount" className="text-base sm:text-sm font-medium">
@@ -170,7 +223,7 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
         </Button>
         <Button 
           type="submit" 
-          disabled={addSaving.isPending || updateSaving.isPending}
+          disabled={addSaving.isPending || updateSaving.isPending || !!validationError}
           onClick={handleSubmit}
           className="flex-1 text-base sm:text-sm h-14 sm:h-10 px-6 font-medium"
         >

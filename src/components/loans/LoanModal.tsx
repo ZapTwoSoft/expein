@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAddLoan, useUpdateLoan, Loan } from '@/hooks/useLoans';
+import { useFinancialValidation } from '@/hooks/useFinancialValidation';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalFooter } from '@/components/ui/responsive-modal';
 import { DatePicker } from '@/components/ui/date-picker';
+import { formatCurrency } from '@/lib/utils';
 
 interface LoanModalProps {
   isOpen: boolean;
@@ -23,9 +26,12 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
   const [interestRate, setInterestRate] = useState('');
   const [status, setStatus] = useState<'active' | 'paid' | 'partially_paid'>('active');
+  const [validationError, setValidationError] = useState<string>('');
 
   const addLoan = useAddLoan();
   const updateLoan = useUpdateLoan();
+  const { validateTransaction, financialSummary } = useFinancialValidation();
+  const { toast } = useToast();
 
   const isEditing = !!loan;
 
@@ -49,12 +55,50 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
       setInterestRate('');
       setStatus('active');
     }
-  }, [loan]);
+    setValidationError('');
+  }, [loan, isOpen]);
+
+  // Validate amount on change (only for loans given)
+  useEffect(() => {
+    if (amount && parseFloat(amount) > 0 && loanType === 'given') {
+      const validation = validateTransaction(
+        parseFloat(amount), 
+        'loan_given',
+        isEditing ? loan?.id : undefined
+      );
+      if (!validation.isValid) {
+        setValidationError(validation.message);
+      } else {
+        setValidationError('');
+      }
+    } else {
+      setValidationError('');
+    }
+  }, [amount, loanType, validateTransaction, isEditing, loan, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!amount || !description || !borrowerLenderName || !date) return;
+
+    // Validate before submitting (only for loans given)
+    if (loanType === 'given') {
+      const validation = validateTransaction(
+        parseFloat(amount), 
+        'loan_given',
+        isEditing ? loan?.id : undefined
+      );
+      
+      if (!validation.isValid) {
+        setValidationError(validation.message);
+        toast({
+          title: "Insufficient Balance",
+          description: validation.message,
+          variant: "destructive",
+        });
+        return;
+      }
+    }
 
     const loanData = {
       amount: parseFloat(amount),
@@ -86,6 +130,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
     setDueDate(undefined);
     setInterestRate('');
     setStatus('active');
+    setValidationError('');
 
     onClose();
   };
@@ -99,6 +144,18 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
     >
       <ResponsiveModalContent>
         <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-4">
+          {/* Available Balance Display - only for loans given */}
+          {loanType === 'given' && (
+            <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-400">Available Balance:</span>
+                <span className={`text-base font-semibold ${financialSummary.availableBalance >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {formatCurrency(financialSummary.availableBalance)}
+                </span>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 gap-5 sm:gap-4">
             <div className="space-y-2">
               <Label htmlFor="amount" className="text-base sm:text-sm font-medium">
@@ -230,7 +287,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
         </Button>
         <Button 
           type="submit" 
-          disabled={addLoan.isPending || updateLoan.isPending}
+          disabled={addLoan.isPending || updateLoan.isPending || (loanType === 'given' && !!validationError)}
           onClick={handleSubmit}
           className="flex-1 text-base sm:text-sm h-14 sm:h-10 px-6 font-medium"
         >

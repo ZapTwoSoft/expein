@@ -142,26 +142,35 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
       ?.filter(loan => loan.loan_type === 'taken')
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
-    // Calculate savings (filtered by date range or all time)
-    const totalSavings = savings
+    // Calculate savings (filtered by date range)
+    const savingsThisMonth = savings
       ?.filter(saving => {
-        if (useMonthFilter) return true; // Show all time savings when no date range
+        if (useMonthFilter) {
+          const savingDate = new Date(saving.date);
+          return savingDate.getMonth() === currentMonth && savingDate.getFullYear() === currentYear;
+        }
         return isInDateRange(saving.date);
       })
       .reduce((sum, saving) => sum + saving.amount, 0) || 0;
+
+    // Calculate total savings (all time for display)
+    const totalSavings = savings
+      ?.reduce((sum, saving) => sum + saving.amount, 0) || 0;
 
     return {
       totalExpensesThisMonth: totalExpensesThisMonth + givenLoansThisMonth,
       totalExpensesLastMonth: totalExpensesLastMonth + givenLoansLastMonth,
       totalIncomeThisMonth: totalIncomeThisMonth + takenLoansThisMonth,
       totalIncomeLastMonth: totalIncomeLastMonth + takenLoansLastMonth,
+      savingsThisMonth,
       totalSavings,
       totalLoansGiven,
       totalLoansTaken
     };
   }, [expenses, income, savings, loans, dateRange]);
 
-  const remainingAmount = summary.totalIncomeThisMonth - summary.totalExpensesThisMonth;
+  // Correct formula: Remaining = Income + LoansTaken - Expenses - LoansGiven - Savings
+  const remainingAmount = summary.totalIncomeThisMonth - summary.totalExpensesThisMonth - summary.savingsThisMonth;
   const periodLabel = dateRange?.from ? 'Selected Period' : 'This Month';
   const periodDescription = dateRange?.from ? 'in selected period' : 'this month';
 
@@ -255,7 +264,7 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-white">
-            {formatCurrency(Math.abs(remainingAmount))}
+            {formatCurrency(remainingAmount)}
           </div>
           <p className="text-xs text-white/70">
             {remainingAmount >= 0 ? 'Available balance' : 'Over budget'}
