@@ -85,10 +85,10 @@ export function IncomeExpenseChart() {
   }
 
   return (
-    <Card className="shadow-sm ring-1 ring-gray-900/5 w-full animate-in fade-in duration-500">
-      <CardHeader className="border-b border-gray-200 px-2 sm:px-6 py-2 sm:py-4">
+    <Card className="shadow-sm bg-white/5 border-white/10 backdrop-blur w-full animate-in fade-in duration-500">
+      <CardHeader className="border-b border-white/10 px-2 sm:px-6 py-2 sm:py-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
-          <CardTitle className="text-sm sm:text-lg font-semibold text-gray-900">
+          <CardTitle className="text-sm sm:text-lg font-semibold text-white">
             Income vs Expenses Trend
           </CardTitle>
           <DateRangePicker
@@ -125,25 +125,26 @@ export function IncomeExpenseChart() {
                   dataKey="displayDate" 
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 8, fill: '#6B7280' }}
+                  tick={{ fontSize: 8, fill: '#9CA3AF' }}
                   interval="preserveStartEnd"
                   height={20}
                 />
                 <YAxis 
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 8, fill: '#6B7280' }}
+                  tick={{ fontSize: 8, fill: '#9CA3AF' }}
                   tickFormatter={(value) => `৳${value > 1000 ? (value/1000).toFixed(0) + 'k' : value.toLocaleString()}`}
                   width={25}
                 />
                 <ChartTooltip 
                   content={<ChartTooltipContent />}
                   contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #E5E7EB',
+                    backgroundColor: '#1a1a1a',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '8px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
                     fontSize: '10px',
+                    color: 'white',
                   }}
                 />
                 <Area

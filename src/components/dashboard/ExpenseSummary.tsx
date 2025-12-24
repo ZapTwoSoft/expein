@@ -141,16 +141,16 @@ export function ExpenseSummary() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 animate-in fade-in duration-500">
       {/* Card 1: Expense This Month */}
       <Card 
-        className="bg-red-50 border-red-200 cursor-pointer hover:bg-red-100 transition-colors"
+        className="bg-red-500/10 border-red-500/20 cursor-pointer hover:bg-red-500/20 transition-colors backdrop-blur"
         onClick={() => navigate('/expenses')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Expense This Month</CardTitle>
-          <TrendingDown className="h-4 w-4 text-red-600" />
+          <CardTitle className="text-sm font-medium text-gray-300">Expense This Month</CardTitle>
+          <TrendingDown className="h-4 w-4 text-red-400" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-red-600">{formatCurrency(summary.totalExpensesThisMonth)}</div>
-          <p className="text-xs text-muted-foreground">
+          <div className="text-2xl font-bold text-red-400">{formatCurrency(summary.totalExpensesThisMonth)}</div>
+          <p className="text-xs text-gray-500">
             Total expenses this month
           </p>
         </CardContent>
@@ -158,32 +158,32 @@ export function ExpenseSummary() {
 
       {/* Card 2: Income This Month */}
       <Card 
-        className="bg-green-50 border-green-200 cursor-pointer hover:bg-green-100 transition-colors"
+        className="bg-brand/10 border-brand/20 cursor-pointer hover:bg-brand/20 transition-colors backdrop-blur"
         onClick={() => navigate('/income')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Income This Month</CardTitle>
-          <TrendingUp className="h-4 w-4 text-green-600" />
+          <CardTitle className="text-sm font-medium text-gray-300">Income This Month</CardTitle>
+          <TrendingUp className="h-4 w-4 text-brand" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-green-600">{formatCurrency(summary.totalIncomeThisMonth)}</div>
-          <p className="text-xs text-muted-foreground">
+          <div className="text-2xl font-bold text-brand">{formatCurrency(summary.totalIncomeThisMonth)}</div>
+          <p className="text-xs text-gray-500">
             Total income this month
           </p>
         </CardContent>
       </Card>
 
       {/* Card 3: Remaining Amount */}
-      <Card className={`${remainingAmount >= 0 ? 'bg-blue-50 border-blue-200' : 'bg-orange-50 border-orange-200'}`}>
+      <Card className={`${remainingAmount >= 0 ? 'bg-blue-500/10 border-blue-500/20' : 'bg-orange-500/10 border-orange-500/20'} backdrop-blur`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Remaining Amount</CardTitle>
-          <DollarSign className={`h-4 w-4 ${remainingAmount >= 0 ? 'text-blue-600' : 'text-orange-600'}`} />
+          <CardTitle className="text-sm font-medium text-gray-300">Remaining Amount</CardTitle>
+          <DollarSign className={`h-4 w-4 ${remainingAmount >= 0 ? 'text-blue-400' : 'text-orange-400'}`} />
         </CardHeader>
         <CardContent>
-          <div className={`text-2xl font-bold ${remainingAmount >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
+          <div className={`text-2xl font-bold ${remainingAmount >= 0 ? 'text-blue-400' : 'text-orange-400'}`}>
             {formatCurrency(Math.abs(remainingAmount))}
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-500">
             {remainingAmount >= 0 ? 'Available balance' : 'Over budget'}
           </p>
         </CardContent>
@@ -191,40 +191,40 @@ export function ExpenseSummary() {
 
       {/* Card 4: Loans Given & Taken */}
       <Card 
-        className="bg-purple-50 border-purple-200 cursor-pointer hover:bg-purple-100 transition-colors"
+        className="bg-purple-500/10 border-purple-500/20 cursor-pointer hover:bg-purple-500/20 transition-colors backdrop-blur"
         onClick={() => navigate('/loans')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Loans</CardTitle>
-          <HandCoins className="h-4 w-4 text-purple-600" />
+          <CardTitle className="text-sm font-medium text-gray-300">Loans</CardTitle>
+          <HandCoins className="h-4 w-4 text-purple-400" />
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             <div 
-              className="flex items-center justify-between cursor-pointer hover:bg-orange-50 p-1 rounded transition-colors"
+              className="flex items-center justify-between cursor-pointer hover:bg-orange-500/10 p-1 rounded transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate('/loans');
               }}
             >
-              <span className="text-xs text-muted-foreground flex items-center">
-                <TrendingDown className="h-3 w-3 text-orange-600 mr-1" />
+              <span className="text-xs text-gray-500 flex items-center">
+                <TrendingDown className="h-3 w-3 text-orange-400 mr-1" />
                 Given
               </span>
-              <span className="text-sm font-medium text-orange-600">{formatCurrency(summary.totalLoansGiven)}</span>
+              <span className="text-sm font-medium text-orange-400">{formatCurrency(summary.totalLoansGiven)}</span>
             </div>
             <div 
-              className="flex items-center justify-between cursor-pointer hover:bg-blue-50 p-1 rounded transition-colors"
+              className="flex items-center justify-between cursor-pointer hover:bg-blue-500/10 p-1 rounded transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate('/loans');
               }}
             >
-              <span className="text-xs text-muted-foreground flex items-center">
-                <TrendingUp className="h-3 w-3 text-blue-600 mr-1" />
+              <span className="text-xs text-gray-500 flex items-center">
+                <TrendingUp className="h-3 w-3 text-blue-400 mr-1" />
                 Taken
               </span>
-              <span className="text-sm font-medium text-blue-600">{formatCurrency(summary.totalLoansTaken)}</span>
+              <span className="text-sm font-medium text-blue-400">{formatCurrency(summary.totalLoansTaken)}</span>
             </div>
           </div>
         </CardContent>

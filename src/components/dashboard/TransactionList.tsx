@@ -97,15 +97,15 @@ export function TransactionList() {
   const getTransactionColor = (type: string) => {
     switch (type) {
       case 'income':
-        return 'bg-green-100 text-green-600';
+        return 'bg-brand/20 text-brand';
       case 'expense':
-        return 'bg-red-100 text-red-600';
+        return 'bg-red-500/20 text-red-400';
       case 'loan_given':
-        return 'bg-orange-100 text-orange-600';
+        return 'bg-orange-500/20 text-orange-400';
       case 'loan_taken':
-        return 'bg-blue-100 text-blue-600';
+        return 'bg-blue-500/20 text-blue-400';
       default:
-        return 'bg-gray-100 text-gray-600';
+        return 'bg-gray-500/20 text-gray-400';
     }
   };
 
@@ -113,12 +113,12 @@ export function TransactionList() {
     switch (type) {
       case 'income':
       case 'loan_taken':
-        return 'text-green-600';
+        return 'text-brand';
       case 'expense':
       case 'loan_given':
-        return 'text-red-600';
+        return 'text-red-400';
       default:
-        return 'text-gray-600';
+        return 'text-gray-400';
     }
   };
 
@@ -139,9 +139,9 @@ export function TransactionList() {
 
   if (isLoading) {
     return (
-      <Card className="shadow-sm ring-1 ring-gray-900/5 animate-in fade-in duration-500">
-        <CardHeader className="border-b border-gray-200  px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
-          <CardTitle className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">
+      <Card className="shadow-sm bg-white/5 border-white/10 backdrop-blur animate-in fade-in duration-500">
+        <CardHeader className="border-b border-white/10 px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
+          <CardTitle className="text-sm sm:text-base lg:text-lg font-semibold text-white">
             Recent Transactions
           </CardTitle>
         </CardHeader>
@@ -153,16 +153,16 @@ export function TransactionList() {
   }
 
   return (
-    <Card className="shadow-sm ring-1 ring-gray-900/5 animate-in fade-in duration-500">
-      <CardHeader className="border-b border-gray-200 px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
-        <CardTitle className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">
+    <Card className="shadow-sm bg-white/5 border-white/10 backdrop-blur animate-in fade-in duration-500">
+      <CardHeader className="border-b border-white/10 px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
+        <CardTitle className="text-sm sm:text-base lg:text-lg font-semibold text-white">
           Recent Transactions
         </CardTitle>
       </CardHeader>
       <CardContent className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-6">
         <div className="h-[250px] sm:h-[350px] lg:h-[400px] overflow-y-auto space-y-2 sm:space-y-3 pr-2 thin-scrollbar">
           {transactions.length === 0 ? (
-            <div className="text-center py-6 sm:py-8 text-muted-foreground">
+            <div className="text-center py-6 sm:py-8 text-gray-400">
               <p className="text-sm sm:text-base">No transactions found</p>
               <p className="text-xs sm:text-sm mt-1">Start by adding some income, expenses, or loans</p>
             </div>
@@ -170,27 +170,27 @@ export function TransactionList() {
             transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-start sm:items-center justify-between p-2 sm:p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors"
+                className="flex items-start sm:items-center justify-between p-2 sm:p-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-start sm:items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
                   <div className={`p-1.5 sm:p-2 rounded-full flex-shrink-0 ${getTransactionColor(transaction.type)}`}>
                     {getTransactionIcon(transaction.type)}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs sm:text-sm font-medium text-gray-900 truncate leading-tight">
+                    <p className="text-xs sm:text-sm font-medium text-white truncate leading-tight">
                       {transaction.description}
                     </p>
-                    <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs text-gray-500 mt-1">
-                      <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 rounded-full text-xs whitespace-nowrap">
+                    <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs text-gray-400 mt-1">
+                      <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/10 rounded-full text-xs whitespace-nowrap">
                         {getTransactionLabel(transaction.type)}
                       </span>
                       {transaction.category && (
-                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 rounded-full text-xs whitespace-nowrap">
+                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/10 rounded-full text-xs whitespace-nowrap">
                           {transaction.category}
                         </span>
                       )}
                       {transaction.loanInfo && (
-                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 rounded-full text-xs whitespace-nowrap">
+                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/10 rounded-full text-xs whitespace-nowrap">
                           {transaction.loanInfo.borrowerLenderName}
                         </span>
                       )}

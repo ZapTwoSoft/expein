@@ -56,14 +56,13 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <NavLink to="/dashboard" onClick={handleNavClick} className="block">
-          <div className="flex items-center gap-2 hover:bg-accent hover:text-accent-foreground rounded-md  transition-colors">
-            <div className="flex !h-8 !w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <span className="text-sm font-bold !h-8 !w-8 flex items-center justify-center">E</span>
-            </div>
+          <div className="flex items-center gap-2 hover:bg-white/5 rounded-md p-2 transition-colors">
             {!isCollapsed && (
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Expein</span>
-                <span className="truncate text-xs">Financial Management</span>
+              <span className="text-xl text-brand font-bold">Expein.</span>
+            )}
+            {isCollapsed && (
+              <div className="flex !h-8 !w-8 items-center justify-center">
+                <span className="text-lg text-brand font-bold">E</span>
               </div>
             )}
           </div>
@@ -71,7 +70,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>App</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-gray-500">App</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -91,7 +90,7 @@ export function AppSidebar() {
         {/* Admin Section - Only show for admin users */}
         {isAdmin && (
           <SidebarGroup>
-            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-gray-500">Admin</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>

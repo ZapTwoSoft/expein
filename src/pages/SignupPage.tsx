@@ -129,30 +129,36 @@ export function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-[#12141a] p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-20 right-20 w-16 h-16 border border-white/10 rounded-lg rotate-12"></div>
+      <div className="absolute top-60 left-32 w-8 h-8 border-2 border-white/10 rounded-full"></div>
+      <div className="absolute bottom-40 right-1/4 w-12 h-12 border border-white/10"></div>
+      <div className="absolute bottom-32 left-20 w-6 h-6 border border-white/10 rotate-45"></div>
+      
+      <div className="w-full max-w-sm relative z-10">
         <div className="flex flex-col space-y-6">
           {/* Header */}
           <div className="flex flex-col space-y-2 text-center">
-            <div className="mx-auto h-12 w-12 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-semibold text-xl">E</span>
+            <div className="mx-auto">
+              <span className="text-3xl text-brand font-bold">Expein.</span>
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-2xl font-semibold tracking-tight text-white">
               Create an account
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-400">
               Enter your information to create your account
             </p>
           </div>
 
-          <Card>
+          <Card className="bg-white/5 border-white/10">
             <CardContent className="p-6">
               <div className="grid gap-6">
                 <Button 
                   variant="outline" 
                   onClick={handleGoogleSignUp}
                   disabled={googleLoading}
-                  className="w-full"
+                  className="w-full bg-white border-white/20 text-black hover:bg-gray-100"
                 >
                   <GoogleIcon className="mr-2 h-4 w-4" />
                   {googleLoading ? "Signing up..." : "Continue with Google"}
@@ -160,10 +166,10 @@ export function SignupPage() {
 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
+                    <span className="w-full border-t border-white/10" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
+                    <span className="bg-[#12141a] px-2 text-gray-400">
                       Or continue with
                     </span>
                   </div>
@@ -171,7 +177,7 @@ export function SignupPage() {
 
                 <form onSubmit={handleSignUp} className="grid gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="fullName">Full name</Label>
+                    <Label htmlFor="fullName" className="text-white">Full name</Label>
                     <Input
                       id="fullName"
                       type="text"
@@ -180,11 +186,12 @@ export function SignupPage() {
                       onChange={(e) => updateFormData('fullName', e.target.value)}
                       required
                       autoComplete="name"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-500"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className="text-white">Email</Label>
                     <Input
                       id="email"
                       type="email"
@@ -193,11 +200,12 @@ export function SignupPage() {
                       onChange={(e) => updateFormData('email', e.target.value)}
                       required
                       autoComplete="email"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-500"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className="text-white">Password</Label>
                     <div className="relative">
                       <Input
                         id="password"
@@ -207,13 +215,13 @@ export function SignupPage() {
                         onChange={(e) => updateFormData('password', e.target.value)}
                         required
                         autoComplete="new-password"
-                        className="pr-10"
+                        className="pr-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-400"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
@@ -229,7 +237,7 @@ export function SignupPage() {
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="confirmPassword">Confirm password</Label>
+                    <Label htmlFor="confirmPassword" className="text-white">Confirm password</Label>
                     <div className="relative">
                       <Input
                         id="confirmPassword"
@@ -239,13 +247,13 @@ export function SignupPage() {
                         onChange={(e) => updateFormData('confirmPassword', e.target.value)}
                         required
                         autoComplete="new-password"
-                        className="pr-10"
+                        className="pr-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-400"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       >
                         {showConfirmPassword ? (
@@ -260,7 +268,7 @@ export function SignupPage() {
                     </div>
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button type="submit" className="w-full bg-brand text-black hover:bg-brand-400 font-medium" disabled={loading}>
                     {loading ? "Creating account..." : "Create account"}
                   </Button>
                 </form>
@@ -268,11 +276,11 @@ export function SignupPage() {
             </CardContent>
           </Card>
 
-          <div className="text-center text-sm">
+          <div className="text-center text-sm text-gray-400">
             Already have an account?{" "}
             <Link 
               to="/login" 
-              className="underline underline-offset-4 hover:text-primary"
+              className="text-brand underline underline-offset-4 hover:text-brand-400"
             >
               Sign in
             </Link>

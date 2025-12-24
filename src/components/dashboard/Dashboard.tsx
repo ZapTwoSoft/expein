@@ -17,10 +17,10 @@ export function Dashboard() {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <div className="space-y-2">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
             Dashboard
           </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
+          <p className="text-gray-400 text-sm md:text-base">
             Track and manage your expenses and income efficiently
           </p>
         </div>
@@ -30,26 +30,26 @@ export function Dashboard() {
           <Button 
             onClick={() => setIsExpenseModalOpen(true)}
             variant="outline"
-            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium"
+            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500/20 hover:text-red-300"
           >
-            <TrendingDown className="h-5 w-5 sm:h-4 sm:w-4 mr-2 text-red-500" />
+            <TrendingDown className="h-5 w-5 sm:h-4 sm:w-4 mr-2" />
             <span>Add Expense</span>
           </Button>
           
           <Button 
             onClick={() => setIsIncomeModalOpen(true)}
-            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium"
+            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium bg-brand text-black hover:bg-brand-400"
           >
-            <TrendingUp className="h-5 w-5 sm:h-4 sm:w-4 mr-2 text-green-500" />
+            <TrendingUp className="h-5 w-5 sm:h-4 sm:w-4 mr-2" />
             <span>Add Income</span>
           </Button>
 
           <Button 
             onClick={() => setIsLoanModalOpen(true)}
-            variant="secondary"
-            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium"
+            variant="outline"
+            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium bg-amber-500/10 border-amber-500/20 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300"
           >
-            <HandCoins className="h-5 w-5 sm:h-4 sm:w-4 mr-2 text-amber-500" />
+            <HandCoins className="h-5 w-5 sm:h-4 sm:w-4 mr-2" />
             <span>Add Loan</span>
           </Button>
         </div>

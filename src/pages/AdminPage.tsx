@@ -171,15 +171,15 @@ export function AdminPage() {
   if (!isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md bg-white/5 border-white/10">
           <CardHeader>
-            <CardTitle className="text-center text-red-600">Access Denied</CardTitle>
+            <CardTitle className="text-center text-red-400">Access Denied</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-muted-foreground mb-4">
+            <p className="text-gray-400 mb-4">
               You don't have permission to access the admin panel.
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-500">
               Only administrators can manage categories.
             </p>
           </CardContent>
@@ -192,15 +192,15 @@ export function AdminPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+          <h1 className="text-2xl font-bold flex items-center gap-2 text-white">
             <Settings className="h-6 w-6" />
             Admin Panel
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-gray-400">
             Manage income and expense categories
           </p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>
+        <Button onClick={() => setIsModalOpen(true)} className="bg-brand text-black hover:bg-brand-400 font-medium">
           <Plus className="h-4 w-4 mr-2" />
           Add Category
         </Button>
@@ -209,32 +209,32 @@ export function AdminPage() {
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Expense Categories */}
-        <Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-red-600">Expense Categories</CardTitle>
+            <CardTitle className="text-red-400">Expense Categories</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {expenseLoading ? (
-              <p>Loading...</p>
+              <p className="text-gray-400">Loading...</p>
             ) : expenseCategories?.length === 0 ? (
-              <p className="text-muted-foreground">No expense categories found</p>
+              <p className="text-gray-500">No expense categories found</p>
             ) : (
               expenseCategories?.map((category) => (
-                <div key={category.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div key={category.id} className="flex items-center justify-between p-3 border border-white/10 rounded-lg bg-white/5">
                   <div className="flex items-center gap-3">
                     <span className="text-lg">{category.icon}</span>
                     <div>
-                      <p className="font-medium">{category.name}</p>
-                      <Badge variant="outline" style={{ backgroundColor: category.color + '20' }}>
+                      <p className="font-medium text-white">{category.name}</p>
+                      <Badge variant="outline" style={{ backgroundColor: category.color + '20', borderColor: category.color + '40' }}>
                         {category.type}
                       </Badge>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button size="sm" variant="outline" onClick={() => handleEdit(category)}>
+                    <Button size="sm" variant="outline" onClick={() => handleEdit(category)} className="border-white/20 hover:bg-white/5">
                       <Edit className="h-3 w-3" />
                     </Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(category.id)}>
+                    <Button size="sm" variant="destructive" onClick={() => handleDelete(category.id)} className="bg-red-500/20 border-red-500/20 hover:bg-red-500/30">
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
@@ -245,32 +245,32 @@ export function AdminPage() {
         </Card>
 
         {/* Income Categories */}
-        <Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-green-600">Income Categories</CardTitle>
+            <CardTitle className="text-brand">Income Categories</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {incomeLoading ? (
-              <p>Loading...</p>
+              <p className="text-gray-400">Loading...</p>
             ) : incomeCategories?.length === 0 ? (
-              <p className="text-muted-foreground">No income categories found</p>
+              <p className="text-gray-500">No income categories found</p>
             ) : (
               incomeCategories?.map((category) => (
-                <div key={category.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div key={category.id} className="flex items-center justify-between p-3 border border-white/10 rounded-lg bg-white/5">
                   <div className="flex items-center gap-3">
                     <span className="text-lg">{category.icon}</span>
                     <div>
-                      <p className="font-medium">{category.name}</p>
-                      <Badge variant="outline" style={{ backgroundColor: category.color + '20' }}>
+                      <p className="font-medium text-white">{category.name}</p>
+                      <Badge variant="outline" style={{ backgroundColor: category.color + '20', borderColor: category.color + '40' }}>
                         {category.type}
                       </Badge>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button size="sm" variant="outline" onClick={() => handleEdit(category)}>
+                    <Button size="sm" variant="outline" onClick={() => handleEdit(category)} className="border-white/20 hover:bg-white/5">
                       <Edit className="h-3 w-3" />
                     </Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(category.id)}>
+                    <Button size="sm" variant="destructive" onClick={() => handleDelete(category.id)} className="bg-red-500/20 border-red-500/20 hover:bg-red-500/30">
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
