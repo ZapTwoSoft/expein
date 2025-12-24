@@ -65,7 +65,7 @@ export function SavingsPage() {
 
         <Card className="sm:col-span-2 lg:col-span-1 bg-white/5 border-white/10 backdrop-blur">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-gray-300">Goal Progress</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-300">Overall Progress</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-lg sm:text-2xl font-bold text-white">

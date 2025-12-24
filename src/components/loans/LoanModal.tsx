@@ -79,7 +79,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !borrowerLenderName || !date) return;
+    if (!amount || !borrowerLenderName || !date) return;
 
     // Validate before submitting (only for loans given)
     if (loanType === 'given') {
@@ -102,7 +102,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
 
     const loanData = {
       amount: parseFloat(amount),
-      description,
+      description: description || '',
       loan_type: loanType,
       borrower_lender_name: borrowerLenderName,
       date: date.toISOString().split('T')[0],
@@ -206,14 +206,13 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
           
           <div className="space-y-2">
             <Label htmlFor="description" className="text-base sm:text-sm font-medium">
-              Description <span className="text-red-500">*</span>
+              Description
             </Label>
             <Textarea
               id="description"
-              placeholder="Enter loan description"
+              placeholder="Enter loan description (optional)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
               className="text-base sm:text-sm min-h-[100px] sm:min-h-[80px] px-4 py-3 resize-none"
             />
           </div>

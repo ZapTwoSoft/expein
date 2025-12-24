@@ -44,12 +44,12 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !date) return;
+    if (!amount || !categoryId || !date) return;
 
     const incomeData = {
       amount: parseFloat(amount),
-      description,
-      category_id: categoryId || null,
+      description: description || '',
+      category_id: categoryId,
       date: date.toISOString().split('T')[0],
     };
 
@@ -112,10 +112,12 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="category" className="text-base sm:text-sm font-medium">Category</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
+            <Label htmlFor="category" className="text-base sm:text-sm font-medium">
+              Category <span className="text-red-500">*</span>
+            </Label>
+            <Select value={categoryId} onValueChange={setCategoryId} required>
               <SelectTrigger className="text-base sm:text-sm h-14 sm:h-10">
-                <SelectValue placeholder="Select a category (optional)" />
+                <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
                 {categories?.map((category) => (
@@ -132,14 +134,13 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
           
           <div className="space-y-2">
             <Label htmlFor="description" className="text-base sm:text-sm font-medium">
-              Description <span className="text-red-500">*</span>
+              Description
             </Label>
             <Textarea
               id="description"
-              placeholder="Enter income description"
+              placeholder="Enter income description (optional)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
               className="text-base sm:text-sm min-h-[100px] sm:min-h-[80px] px-4 py-3 resize-none"
             />
           </div>

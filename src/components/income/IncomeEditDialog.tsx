@@ -34,13 +34,13 @@ export function IncomeEditDialog({ income, onClose }: IncomeEditDialogProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!income || !amount || !description) return;
+    if (!income || !amount || !categoryId) return;
 
     await updateIncome.mutateAsync({
       id: income.id,
       amount: parseFloat(amount),
-      description,
-      category_id: categoryId || null,
+      description: description || '',
+      category_id: categoryId,
       date,
     });
 
@@ -82,19 +82,8 @@ export function IncomeEditDialog({ income, onClose }: IncomeEditDialogProps) {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="edit-income-description">Description</Label>
-            <Input
-              id="edit-income-description"
-              placeholder="Enter income description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="edit-income-category">Category</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
+            <Label htmlFor="edit-income-category">Category <span className="text-red-500">*</span></Label>
+            <Select value={categoryId} onValueChange={setCategoryId} required>
               <SelectTrigger>
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
@@ -109,6 +98,16 @@ export function IncomeEditDialog({ income, onClose }: IncomeEditDialogProps) {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="edit-income-description">Description</Label>
+            <Input
+              id="edit-income-description"
+              placeholder="Enter income description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           
           <div className="flex justify-end space-x-2">

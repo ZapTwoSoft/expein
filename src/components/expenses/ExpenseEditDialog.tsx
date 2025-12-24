@@ -34,13 +34,13 @@ export function ExpenseEditDialog({ expense, onClose }: ExpenseEditDialogProps) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!expense || !amount || !description) return;
+    if (!expense || !amount || !categoryId) return;
 
     await updateExpense.mutateAsync({
       id: expense.id,
       amount: parseFloat(amount),
-      description,
-      category_id: categoryId || null,
+      description: description || '',
+      category_id: categoryId,
       date,
     });
 
@@ -81,18 +81,8 @@ export function ExpenseEditDialog({ expense, onClose }: ExpenseEditDialogProps) 
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="edit-description">Description</Label>
-            <Input
-              id="edit-description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="edit-category">Category</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
+            <Label htmlFor="edit-category">Category <span className="text-red-500">*</span></Label>
+            <Select value={categoryId} onValueChange={setCategoryId} required>
               <SelectTrigger>
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
@@ -107,6 +97,16 @@ export function ExpenseEditDialog({ expense, onClose }: ExpenseEditDialogProps) 
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="edit-description">Description</Label>
+            <Input
+              id="edit-description"
+              placeholder="Enter description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           
           <div className="flex space-x-2">

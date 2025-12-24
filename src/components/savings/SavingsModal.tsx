@@ -69,7 +69,7 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !date) return;
+    if (!amount || !date) return;
 
     // Validate before submitting
     const validation = validateTransaction(
@@ -90,7 +90,7 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
 
     const savingData = {
       amount: parseFloat(amount),
-      description,
+      description: description || '',
       goal_name: goalName || null,
       goal_amount: goalAmount ? parseFloat(goalAmount) : null,
       date: date.toISOString().split('T')[0],
@@ -168,14 +168,13 @@ export function SavingsModal({ isOpen, onClose, saving }: SavingsModalProps) {
           
           <div className="space-y-2">
             <Label htmlFor="description" className="text-base sm:text-sm font-medium">
-              Description <span className="text-red-500">*</span>
+              Description
             </Label>
             <Textarea
               id="description"
-              placeholder="Enter saving description"
+              placeholder="Enter saving description (optional)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
               className="text-base sm:text-sm min-h-[100px] sm:min-h-[80px] px-4 py-3 resize-none"
             />
           </div>

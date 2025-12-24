@@ -68,7 +68,7 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !date) return;
+    if (!amount || !categoryId || !date) return;
 
     // Validate before submitting
     const validation = validateTransaction(
@@ -89,8 +89,8 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
 
     const expenseData = {
       amount: parseFloat(amount),
-      description,
-      category_id: categoryId || null,
+      description: description || '',
+      category_id: categoryId,
       date: date.toISOString().split('T')[0],
     };
 
@@ -164,24 +164,12 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-base sm:text-sm font-medium">
-              Description <span className="text-red-500">*</span>
+            <Label htmlFor="category" className="text-base sm:text-sm font-medium">
+              Category <span className="text-red-500">*</span>
             </Label>
-            <Textarea
-              id="description"
-              placeholder="Enter expense description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              className="text-base sm:text-sm min-h-[100px] sm:min-h-[80px] px-4 py-3 resize-none"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="category" className="text-base sm:text-sm font-medium">Category</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
+            <Select value={categoryId} onValueChange={setCategoryId} required>
               <SelectTrigger className="text-base sm:text-sm h-14 sm:h-10">
-                <SelectValue placeholder="Select a category (optional)" />
+                <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
                 {categories?.map((category) => (
@@ -194,6 +182,19 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-base sm:text-sm font-medium">
+              Description
+            </Label>
+            <Textarea
+              id="description"
+              placeholder="Enter expense description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="text-base sm:text-sm min-h-[100px] sm:min-h-[80px] px-4 py-3 resize-none"
+            />
           </div>
         </form>
       </ResponsiveModalContent>
