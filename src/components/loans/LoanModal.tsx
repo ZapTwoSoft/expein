@@ -63,7 +63,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
       date: date.toISOString().split('T')[0],
       due_date: dueDate ? dueDate.toISOString().split('T')[0] : null,
       interest_rate: interestRate ? parseFloat(interestRate) : null,
-      ...(isEditing && { status })
+      status
     };
 
     if (isEditing) {

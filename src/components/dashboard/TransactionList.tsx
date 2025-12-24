@@ -139,8 +139,8 @@ export function TransactionList() {
 
   if (isLoading) {
     return (
-      <Card className="bg-white shadow-sm ring-1 ring-gray-900/5 animate-in fade-in duration-500">
-        <CardHeader className="border-b border-gray-200 bg-white px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
+      <Card className="shadow-sm ring-1 ring-gray-900/5 animate-in fade-in duration-500">
+        <CardHeader className="border-b border-gray-200  px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
           <CardTitle className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">
             Recent Transactions
           </CardTitle>
@@ -153,8 +153,8 @@ export function TransactionList() {
   }
 
   return (
-    <Card className="bg-white shadow-sm ring-1 ring-gray-900/5 animate-in fade-in duration-500">
-      <CardHeader className="border-b border-gray-200 bg-white px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
+    <Card className="shadow-sm ring-1 ring-gray-900/5 animate-in fade-in duration-500">
+      <CardHeader className="border-b border-gray-200 px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
         <CardTitle className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">
           Recent Transactions
         </CardTitle>

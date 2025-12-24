@@ -85,8 +85,8 @@ export function IncomeExpenseChart() {
   }
 
   return (
-    <Card className="bg-white shadow-sm ring-1 ring-gray-900/5 w-full animate-in fade-in duration-500">
-      <CardHeader className="border-b border-gray-200 bg-white px-2 sm:px-6 py-2 sm:py-4">
+    <Card className="shadow-sm ring-1 ring-gray-900/5 w-full animate-in fade-in duration-500">
+      <CardHeader className="border-b border-gray-200 px-2 sm:px-6 py-2 sm:py-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
           <CardTitle className="text-sm sm:text-lg font-semibold text-gray-900">
             Income vs Expenses Trend

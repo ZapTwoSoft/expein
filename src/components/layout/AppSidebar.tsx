@@ -51,7 +51,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <NavLink to="/" onClick={handleNavClick} className="block">
-          <div className="flex items-center gap-2 hover:bg-accent hover:text-accent-foreground rounded-md p-2 transition-colors">
+          <div className="flex items-center gap-2 hover:bg-accent hover:text-accent-foreground rounded-md  transition-colors">
             <div className="flex !h-8 !w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <span className="text-sm font-bold !h-8 !w-8 flex items-center justify-center">E</span>
             </div>
