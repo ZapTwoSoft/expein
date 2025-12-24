@@ -8,12 +8,14 @@ import { ExpenseModal } from '@/components/expenses/ExpenseModal';
 import { IncomeModal } from '@/components/income/IncomeModal';
 import { LoanModal } from '@/components/loans/LoanModal';
 import { SavingsModal } from '@/components/savings/SavingsModal';
+import { DateRange } from 'react-day-picker';
 
 export function Dashboard() {
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
   const [isSavingsModalOpen, setIsSavingsModalOpen] = useState(false);
   const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -66,7 +68,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      <ExpenseSummary />
+      <ExpenseSummary dateRange={dateRange} onDateRangeChange={setDateRange} />
 
       {/* Chart and Transaction List Side by Side */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">

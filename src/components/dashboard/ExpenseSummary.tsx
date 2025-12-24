@@ -8,8 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SkeletonSummaryCard } from '@/components/ui/skeleton';
 import { TrendingUp, TrendingDown, DollarSign, PiggyBank, HandCoins } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import { DateRange } from 'react-day-picker';
+import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { isWithinInterval, parseISO } from 'date-fns';
 
-export function ExpenseSummary() {
+interface ExpenseSummaryProps {
+  dateRange?: DateRange;
+  onDateRangeChange?: (dateRange: DateRange | undefined) => void;
+}
+
+export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryProps) {
   const { data: expenses, isLoading: expensesLoading } = useExpenses();
   const { data: income, isLoading: incomeLoading } = useIncome();
   const { data: savings, isLoading: savingsLoading } = useSavings();
@@ -29,17 +37,33 @@ export function ExpenseSummary() {
       totalLoansTaken: 0
     };
 
+    // Helper function to check if a date is within the selected range
+    const isInDateRange = (dateStr: string) => {
+      if (!dateRange?.from) return false;
+      const date = parseISO(dateStr);
+      if (dateRange.to) {
+        return isWithinInterval(date, { start: dateRange.from, end: dateRange.to });
+      }
+      return date >= dateRange.from;
+    };
+
+    // If date range is selected, use it; otherwise default to "this month"
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
     const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    
+    const useMonthFilter = !dateRange?.from;
 
     // Calculate base expenses
     const totalExpensesThisMonth = expenses
       ?.filter(expense => {
-        const expenseDate = new Date(expense.date);
-        return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+        if (useMonthFilter) {
+          const expenseDate = new Date(expense.date);
+          return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+        }
+        return isInDateRange(expense.date);
       })
       .reduce((sum, expense) => sum + expense.amount, 0) || 0;
 
@@ -53,8 +77,11 @@ export function ExpenseSummary() {
     // Calculate base income
     const totalIncomeThisMonth = income
       ?.filter(incomeItem => {
-        const incomeDate = new Date(incomeItem.date);
-        return incomeDate.getMonth() === currentMonth && incomeDate.getFullYear() === currentYear;
+        if (useMonthFilter) {
+          const incomeDate = new Date(incomeItem.date);
+          return incomeDate.getMonth() === currentMonth && incomeDate.getFullYear() === currentYear;
+        }
+        return isInDateRange(incomeItem.date);
       })
       .reduce((sum, incomeItem) => sum + incomeItem.amount, 0) || 0;
 
@@ -68,10 +95,12 @@ export function ExpenseSummary() {
     // Calculate loans impact
     const givenLoansThisMonth = loans
       ?.filter(loan => {
-        const loanDate = new Date(loan.date);
-        return loan.loan_type === 'given' && 
-               loanDate.getMonth() === currentMonth && 
-               loanDate.getFullYear() === currentYear;
+        if (loan.loan_type !== 'given') return false;
+        if (useMonthFilter) {
+          const loanDate = new Date(loan.date);
+          return loanDate.getMonth() === currentMonth && loanDate.getFullYear() === currentYear;
+        }
+        return isInDateRange(loan.date);
       })
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
@@ -86,10 +115,12 @@ export function ExpenseSummary() {
 
     const takenLoansThisMonth = loans
       ?.filter(loan => {
-        const loanDate = new Date(loan.date);
-        return loan.loan_type === 'taken' && 
-               loanDate.getMonth() === currentMonth && 
-               loanDate.getFullYear() === currentYear;
+        if (loan.loan_type !== 'taken') return false;
+        if (useMonthFilter) {
+          const loanDate = new Date(loan.date);
+          return loanDate.getMonth() === currentMonth && loanDate.getFullYear() === currentYear;
+        }
+        return isInDateRange(loan.date);
       })
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
@@ -111,9 +142,13 @@ export function ExpenseSummary() {
       ?.filter(loan => loan.loan_type === 'taken')
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
-    // Calculate total savings (all time)
+    // Calculate savings (filtered by date range or all time)
     const totalSavings = savings
-      ?.reduce((sum, saving) => sum + saving.amount, 0) || 0;
+      ?.filter(saving => {
+        if (useMonthFilter) return true; // Show all time savings when no date range
+        return isInDateRange(saving.date);
+      })
+      .reduce((sum, saving) => sum + saving.amount, 0) || 0;
 
     return {
       totalExpensesThisMonth: totalExpensesThisMonth + givenLoansThisMonth,
@@ -124,9 +159,11 @@ export function ExpenseSummary() {
       totalLoansGiven,
       totalLoansTaken
     };
-  }, [expenses, income, savings, loans]);
+  }, [expenses, income, savings, loans, dateRange]);
 
   const remainingAmount = summary.totalIncomeThisMonth - summary.totalExpensesThisMonth;
+  const periodLabel = dateRange?.from ? 'Selected Period' : 'This Month';
+  const periodDescription = dateRange?.from ? 'in selected period' : 'this month';
 
   if (isLoading) {
     return (
@@ -141,57 +178,68 @@ export function ExpenseSummary() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6 animate-in fade-in duration-500">
-      {/* Card 1: Expense This Month */}
+    <>
+      {/* Date Range Filter */}
+      {onDateRangeChange && (
+        <div className="flex justify-end mb-4">
+          <DateRangePicker
+            date={dateRange}
+            onDateChange={onDateRangeChange}
+          />
+        </div>
+      )}
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6 animate-in fade-in duration-500">
+        {/* Card 1: Expenses */}
       <Card 
         className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
         style={{ backgroundColor: '#ef4444', opacity: 1 }}
         onClick={() => navigate('/expenses')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white/80">Expense This Month</CardTitle>
+          <CardTitle className="text-sm font-medium text-white/80">Expenses</CardTitle>
           <TrendingDown className="h-4 w-4 text-white/80" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-white">{formatCurrency(summary.totalExpensesThisMonth)}</div>
           <p className="text-xs text-white/70">
-            Total expenses this month
+            Total expenses {periodDescription}
           </p>
         </CardContent>
       </Card>
 
-      {/* Card 2: Income This Month */}
+      {/* Card 2: Income */}
       <Card 
         className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
         style={{ backgroundColor: '#84cc85', opacity: 1 }}
         onClick={() => navigate('/income')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-gray-800/80">Income This Month</CardTitle>
+          <CardTitle className="text-sm font-medium text-gray-800/80">Income</CardTitle>
           <TrendingUp className="h-4 w-4 text-gray-800/80" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-gray-900">{formatCurrency(summary.totalIncomeThisMonth)}</div>
           <p className="text-xs text-gray-800/70">
-            Total income this month
+            Total income {periodDescription}
           </p>
         </CardContent>
       </Card>
 
-      {/* Card 3: Total Savings */}
+      {/* Card 3: Savings */}
       <Card 
         className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
         style={{ backgroundColor: '#3b82f6', opacity: 1 }}
         onClick={() => navigate('/savings')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white/80">Total Savings</CardTitle>
+          <CardTitle className="text-sm font-medium text-white/80">Savings</CardTitle>
           <PiggyBank className="h-4 w-4 text-white/80" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-white">{formatCurrency(summary.totalSavings)}</div>
           <p className="text-xs text-white/70">
-            All time savings
+            {dateRange?.from ? `Saved ${periodDescription}` : 'All time savings'}
           </p>
         </CardContent>
       </Card>
@@ -257,5 +305,6 @@ export function ExpenseSummary() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }
