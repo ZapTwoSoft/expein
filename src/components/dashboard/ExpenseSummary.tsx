@@ -141,7 +141,8 @@ export function ExpenseSummary() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 animate-in fade-in duration-500">
       {/* Card 1: Expense This Month */}
       <Card 
-        className="bg-red-500/10 border-red-500/20 cursor-pointer hover:bg-red-500/20 transition-colors backdrop-blur"
+        className="bg-[#3d1f1f] border-[#5a2d2d] cursor-pointer hover:bg-[#4a2525] transition-colors shadow-lg"
+        style={{ backgroundColor: '#3d1f1f', opacity: 1 }}
         onClick={() => navigate('/expenses')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -150,7 +151,7 @@ export function ExpenseSummary() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-red-400">{formatCurrency(summary.totalExpensesThisMonth)}</div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-400">
             Total expenses this month
           </p>
         </CardContent>
@@ -158,7 +159,8 @@ export function ExpenseSummary() {
 
       {/* Card 2: Income This Month */}
       <Card 
-        className="bg-brand/10 border-brand/20 cursor-pointer hover:bg-brand/20 transition-colors backdrop-blur"
+        className="bg-[#1f3d2d] border-[#2d5a42] cursor-pointer hover:bg-[#254733] transition-colors shadow-lg"
+        style={{ backgroundColor: '#1f3d2d', opacity: 1 }}
         onClick={() => navigate('/income')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -167,14 +169,17 @@ export function ExpenseSummary() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-brand">{formatCurrency(summary.totalIncomeThisMonth)}</div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-400">
             Total income this month
           </p>
         </CardContent>
       </Card>
 
       {/* Card 3: Remaining Amount */}
-      <Card className={`${remainingAmount >= 0 ? 'bg-blue-500/10 border-blue-500/20' : 'bg-orange-500/10 border-orange-500/20'} backdrop-blur`}>
+      <Card 
+        className={`${remainingAmount >= 0 ? 'bg-[#1f2d3d] border-[#2d425a]' : 'bg-[#3d2d1f] border-[#5a422d]'} shadow-lg`}
+        style={{ backgroundColor: remainingAmount >= 0 ? '#1f2d3d' : '#3d2d1f', opacity: 1 }}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-gray-300">Remaining Amount</CardTitle>
           <DollarSign className={`h-4 w-4 ${remainingAmount >= 0 ? 'text-blue-400' : 'text-orange-400'}`} />
@@ -183,7 +188,7 @@ export function ExpenseSummary() {
           <div className={`text-2xl font-bold ${remainingAmount >= 0 ? 'text-blue-400' : 'text-orange-400'}`}>
             {formatCurrency(Math.abs(remainingAmount))}
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-400">
             {remainingAmount >= 0 ? 'Available balance' : 'Over budget'}
           </p>
         </CardContent>
@@ -191,7 +196,8 @@ export function ExpenseSummary() {
 
       {/* Card 4: Loans Given & Taken */}
       <Card 
-        className="bg-purple-500/10 border-purple-500/20 cursor-pointer hover:bg-purple-500/20 transition-colors backdrop-blur"
+        className="bg-[#2d1f3d] border-[#422d5a] cursor-pointer hover:bg-[#332547] transition-colors shadow-lg"
+        style={{ backgroundColor: '#2d1f3d', opacity: 1 }}
         onClick={() => navigate('/loans')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -207,7 +213,7 @@ export function ExpenseSummary() {
                 navigate('/loans');
               }}
             >
-              <span className="text-xs text-gray-500 flex items-center">
+              <span className="text-xs text-gray-400 flex items-center">
                 <TrendingDown className="h-3 w-3 text-orange-400 mr-1" />
                 Given
               </span>
@@ -220,7 +226,7 @@ export function ExpenseSummary() {
                 navigate('/loans');
               }}
             >
-              <span className="text-xs text-gray-500 flex items-center">
+              <span className="text-xs text-gray-400 flex items-center">
                 <TrendingUp className="h-3 w-3 text-blue-400 mr-1" />
                 Taken
               </span>
