@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useIncome } from '@/hooks/useIncome';
 import { useLoans } from '@/hooks/useLoans';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SkeletonList } from '@/components/ui/skeleton';
 import { TrendingUp, TrendingDown, HandCoins } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isWithinInterval, parseISO } from 'date-fns';
 import { formatCurrency } from '@/lib/utils';
+import { DateRange } from 'react-day-picker';
 
 interface Transaction {
   id: string;
@@ -21,7 +22,11 @@ interface Transaction {
   };
 }
 
-export function TransactionList() {
+interface TransactionListProps {
+  dateRange?: DateRange;
+}
+
+export function TransactionList({ dateRange }: TransactionListProps) {
   const { data: expenses, isLoading: expensesLoading } = useExpenses();
   const { data: income, isLoading: incomeLoading } = useIncome();
   const { data: loans, isLoading: loansLoading } = useLoans();
@@ -30,50 +35,66 @@ export function TransactionList() {
   const transactions = useMemo(() => {
     const allTransactions: Transaction[] = [];
 
+    // Helper function to check if a date is within the selected range
+    const isInDateRange = (dateStr: string) => {
+      if (!dateRange?.from) return true;
+      const date = parseISO(dateStr);
+      if (dateRange.to) {
+        return isWithinInterval(date, { start: dateRange.from, end: dateRange.to });
+      }
+      return date >= dateRange.from;
+    };
+
     // Add expenses
     expenses?.forEach(expense => {
-      allTransactions.push({
-        id: expense.id,
-        type: 'expense',
-        amount: expense.amount,
-        description: expense.description,
-        category: expense.categories?.name,
-        date: expense.date,
-      });
+      if (isInDateRange(expense.date)) {
+        allTransactions.push({
+          id: expense.id,
+          type: 'expense',
+          amount: expense.amount,
+          description: expense.description,
+          category: expense.categories?.name,
+          date: expense.date,
+        });
+      }
     });
 
     // Add income
     income?.forEach(incomeItem => {
-      allTransactions.push({
-        id: incomeItem.id,
-        type: 'income',
-        amount: incomeItem.amount,
-        description: incomeItem.description,
-        category: incomeItem.categories?.name,
-        date: incomeItem.date,
-      });
+      if (isInDateRange(incomeItem.date)) {
+        allTransactions.push({
+          id: incomeItem.id,
+          type: 'income',
+          amount: incomeItem.amount,
+          description: incomeItem.description,
+          category: incomeItem.categories?.name,
+          date: incomeItem.date,
+        });
+      }
     });
 
     // Add loans
     loans?.forEach(loan => {
-      allTransactions.push({
-        id: loan.id,
-        type: loan.loan_type === 'given' ? 'loan_given' : 'loan_taken',
-        amount: loan.amount,
-        description: loan.description,
-        date: loan.date,
-        loanInfo: {
-          borrowerLenderName: loan.borrower_lender_name,
-          status: loan.status,
-        },
-      });
+      if (isInDateRange(loan.date)) {
+        allTransactions.push({
+          id: loan.id,
+          type: loan.loan_type === 'given' ? 'loan_given' : 'loan_taken',
+          amount: loan.amount,
+          description: loan.description,
+          date: loan.date,
+          loanInfo: {
+            borrowerLenderName: loan.borrower_lender_name,
+            status: loan.status,
+          },
+        });
+      }
     });
 
     // Sort by date (most recent first)
     return allTransactions.sort((a, b) => 
       new Date(b.date).getTime() - new Date(a.date).getTime()
     ).slice(0, 15); // Show more transactions since we now have loans too
-  }, [expenses, income, loans]);
+  }, [expenses, income, loans, dateRange]);
 
 
   const getTransactionIcon = (type: string) => {

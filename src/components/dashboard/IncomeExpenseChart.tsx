@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useIncome } from '@/hooks/useIncome';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,8 +6,7 @@ import { SkeletonChart } from '@/components/ui/skeleton';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Area, AreaChart, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { DateRange } from 'react-day-picker';
-import { DateRangePicker } from '@/components/ui/date-range-picker';
-import { startOfMonth, endOfMonth, isWithinInterval, format } from 'date-fns';
+import { isWithinInterval, format } from 'date-fns';
 
 const chartConfig = {
   income: {
@@ -20,16 +19,14 @@ const chartConfig = {
   },
 };
 
-export function IncomeExpenseChart() {
+interface IncomeExpenseChartProps {
+  dateRange?: DateRange;
+}
+
+export function IncomeExpenseChart({ dateRange }: IncomeExpenseChartProps) {
   const { data: expenses, isLoading: expensesLoading } = useExpenses();
   const { data: income, isLoading: incomeLoading } = useIncome();
   const isLoading = expensesLoading || incomeLoading;
-  
-  // Initialize with current month
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: startOfMonth(new Date()),
-    to: endOfMonth(new Date()),
-  });
 
   const chartData = useMemo(() => {
     if (!expenses && !income) return [];
@@ -87,16 +84,9 @@ export function IncomeExpenseChart() {
   return (
     <Card className="shadow-sm bg-white/5 border-white/10 backdrop-blur w-full animate-in fade-in duration-500">
       <CardHeader className="border-b border-white/10 px-2 sm:px-6 py-2 sm:py-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
-          <CardTitle className="text-sm sm:text-lg font-semibold text-white">
-            Income vs Expenses Trend
-          </CardTitle>
-          {/* <DateRangePicker
-            date={dateRange}
-            onDateChange={setDateRange}
-            className="w-full sm:w-auto"
-          /> */}
-        </div>
+        <CardTitle className="text-sm sm:text-lg font-semibold text-white">
+          Income vs Expenses Trend
+        </CardTitle>
       </CardHeader>
       <CardContent className="px-2 sm:px-6 py-2 sm:py-6">
         <div className="w-full min-w-0">

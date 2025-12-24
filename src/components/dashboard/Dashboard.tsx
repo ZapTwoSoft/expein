@@ -10,13 +10,19 @@ import { IncomeModal } from '@/components/income/IncomeModal';
 import { LoanModal } from '@/components/loans/LoanModal';
 import { SavingsModal } from '@/components/savings/SavingsModal';
 import { DateRange } from 'react-day-picker';
+import { subYears } from 'date-fns';
 
 export function Dashboard() {
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
   const [isSavingsModalOpen, setIsSavingsModalOpen] = useState(false);
   const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  
+  // Default to 1 year date range
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: subYears(new Date(), 1),
+    to: new Date(),
+  });
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -74,15 +80,15 @@ export function Dashboard() {
       {/* Charts Row - Income/Expense Trend and Category Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2">
-          <IncomeExpenseChart />
+          <IncomeExpenseChart dateRange={dateRange} />
         </div>
         <div className="lg:col-span-1">
-          <CategoryExpenseChart />
+          <CategoryExpenseChart dateRange={dateRange} />
         </div>
       </div>
 
       {/* Recent Transactions - Full Width */}
-      <TransactionList />
+      <TransactionList dateRange={dateRange} />
 
       {/* Modals */}
       <ExpenseModal
