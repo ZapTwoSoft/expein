@@ -10,14 +10,15 @@ export function cn(...inputs: ClassValue[]) {
  * - Uses "T" notation for trillions (e.g., 1.5T)
  * - Uses "B" notation for billions (e.g., 2.3B)
  * - Uses "M" notation for millions (e.g., 5.7M)
- * - Uses "K" notation for thousands (e.g., 30K)
+ * - Uses "K" notation for amounts > 9 lakh (900,000)
+ * - Shows full number with commas for amounts <= 9 lakh
  * - Hides decimal points if they are .00
  * - Preserves significant decimals (up to 2 places)
  * - Always shows minus sign for negative numbers
  * - Only shows plus sign for positive numbers if showSign is true
  */
 export function formatCurrency(amount: number, options?: { prefix?: string; showSign?: boolean }): string {
-  const { prefix = 'BDT', showSign = false } = options || {};
+  const { prefix = '৳', showSign = false } = options || {};
   const absAmount = Math.abs(amount);
   
   // Determine sign:
@@ -43,16 +44,16 @@ export function formatCurrency(amount: number, options?: { prefix?: string; show
     const value = absAmount / 1_000_000;
     const numFormatted = value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
     formatted = `${numFormatted}M`;
-  } else if (absAmount >= 1_000) {
-    // Thousands (K)
+  } else if (absAmount > 900_000) {
+    // More than 9 lakh (900,000), use K notation
     const value = absAmount / 1_000;
     const numFormatted = value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
     formatted = `${numFormatted}K`;
   } else {
-    // Less than 1000, show as is but hide .00
+    // 9 lakh or less, show full number with commas
     formatted = absAmount % 1 === 0 
-      ? absAmount.toFixed(0) 
-      : absAmount.toFixed(2);
+      ? absAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })
+      : absAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   
   return `${sign}${prefix} ${formatted}`;

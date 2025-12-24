@@ -10,7 +10,6 @@ import { IncomeModal } from '@/components/income/IncomeModal';
 import { LoanModal } from '@/components/loans/LoanModal';
 import { SavingsModal } from '@/components/savings/SavingsModal';
 import { DateRange } from 'react-day-picker';
-import { subYears } from 'date-fns';
 
 export function Dashboard() {
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
@@ -18,10 +17,11 @@ export function Dashboard() {
   const [isSavingsModalOpen, setIsSavingsModalOpen] = useState(false);
   const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
   
-  // Default to 1 year date range
+  // Default to current year: January 1st to December 31st
+  const currentYear = new Date().getFullYear();
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: subYears(new Date(), 1),
-    to: new Date(),
+    from: new Date(currentYear, 0, 1), // January 1st of current year
+    to: new Date(currentYear, 11, 31), // December 31st of current year
   });
 
   return (

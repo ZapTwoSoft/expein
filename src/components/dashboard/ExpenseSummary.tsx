@@ -39,7 +39,7 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
 
     // Helper function to check if a date is within the selected range
     const isInDateRange = (dateStr: string) => {
-      if (!dateRange?.from) return false;
+      if (!dateRange?.from) return true; // If no date range, show all data
       const date = parseISO(dateStr);
       if (dateRange.to) {
         return isWithinInterval(date, { start: dateRange.from, end: dateRange.to });
@@ -47,24 +47,16 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
       return date >= dateRange.from;
     };
 
-    // If date range is selected, use it; otherwise default to "this month"
+    // For last month calculations (used for comparison)
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
     const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-    
-    const useMonthFilter = !dateRange?.from;
 
     // Calculate base expenses
     const totalExpensesThisMonth = expenses
-      ?.filter(expense => {
-        if (useMonthFilter) {
-          const expenseDate = new Date(expense.date);
-          return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
-        }
-        return isInDateRange(expense.date);
-      })
+      ?.filter(expense => isInDateRange(expense.date))
       .reduce((sum, expense) => sum + expense.amount, 0) || 0;
 
     const totalExpensesLastMonth = expenses
@@ -76,13 +68,7 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
 
     // Calculate base income
     const totalIncomeThisMonth = income
-      ?.filter(incomeItem => {
-        if (useMonthFilter) {
-          const incomeDate = new Date(incomeItem.date);
-          return incomeDate.getMonth() === currentMonth && incomeDate.getFullYear() === currentYear;
-        }
-        return isInDateRange(incomeItem.date);
-      })
+      ?.filter(incomeItem => isInDateRange(incomeItem.date))
       .reduce((sum, incomeItem) => sum + incomeItem.amount, 0) || 0;
 
     const totalIncomeLastMonth = income
@@ -94,14 +80,7 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
 
     // Calculate loans impact
     const givenLoansThisMonth = loans
-      ?.filter(loan => {
-        if (loan.loan_type !== 'given') return false;
-        if (useMonthFilter) {
-          const loanDate = new Date(loan.date);
-          return loanDate.getMonth() === currentMonth && loanDate.getFullYear() === currentYear;
-        }
-        return isInDateRange(loan.date);
-      })
+      ?.filter(loan => loan.loan_type === 'given' && isInDateRange(loan.date))
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
     const givenLoansLastMonth = loans
@@ -114,14 +93,7 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
     const takenLoansThisMonth = loans
-      ?.filter(loan => {
-        if (loan.loan_type !== 'taken') return false;
-        if (useMonthFilter) {
-          const loanDate = new Date(loan.date);
-          return loanDate.getMonth() === currentMonth && loanDate.getFullYear() === currentYear;
-        }
-        return isInDateRange(loan.date);
-      })
+      ?.filter(loan => loan.loan_type === 'taken' && isInDateRange(loan.date))
       .reduce((sum, loan) => sum + loan.amount, 0) || 0;
 
     const takenLoansLastMonth = loans
@@ -144,13 +116,7 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
 
     // Calculate savings (filtered by date range)
     const savingsThisMonth = savings
-      ?.filter(saving => {
-        if (useMonthFilter) {
-          const savingDate = new Date(saving.date);
-          return savingDate.getMonth() === currentMonth && savingDate.getFullYear() === currentYear;
-        }
-        return isInDateRange(saving.date);
-      })
+      ?.filter(saving => isInDateRange(saving.date))
       .reduce((sum, saving) => sum + saving.amount, 0) || 0;
 
     // Calculate total savings (all time for display)
@@ -171,8 +137,8 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
 
   // Correct formula: Remaining = Income + LoansTaken - Expenses - LoansGiven - Savings
   const remainingAmount = summary.totalIncomeThisMonth - summary.totalExpensesThisMonth - summary.savingsThisMonth;
-  const periodLabel = dateRange?.from ? 'Selected Period' : 'This Month';
-  const periodDescription = dateRange?.from ? 'in selected period' : 'this month';
+  const periodLabel = dateRange?.from ? 'Selected Period' : 'All Time';
+  const periodDescription = dateRange?.from ? 'in selected period' : 'all time';
 
   if (isLoading) {
     return (
@@ -199,25 +165,7 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
       )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6 animate-in fade-in duration-500">
-        {/* Card 1: Expenses */}
-      <Card 
-        className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
-        style={{ backgroundColor: '#ef4444', opacity: 1 }}
-        onClick={() => navigate('/expenses')}
-      >
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white/80">Expenses</CardTitle>
-          <TrendingDown className="h-4 w-4 text-white/80" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-white">{formatCurrency(summary.totalExpensesThisMonth)}</div>
-          <p className="text-xs text-white/70">
-            Total expenses {periodDescription}
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* Card 2: Income */}
+        {/* Card 1: Income */}
       <Card 
         className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
         style={{ backgroundColor: '#84cc85', opacity: 1 }}
@@ -235,25 +183,25 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
         </CardContent>
       </Card>
 
-      {/* Card 3: Savings */}
+        {/* Card 2: Expenses */}
       <Card 
         className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
-        style={{ backgroundColor: '#3b82f6', opacity: 1 }}
-        onClick={() => navigate('/savings')}
+        style={{ backgroundColor: '#ef4444', opacity: 1 }}
+        onClick={() => navigate('/expenses')}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white/80">Savings</CardTitle>
-          <PiggyBank className="h-4 w-4 text-white/80" />
+          <CardTitle className="text-sm font-medium text-white/80">Expenses</CardTitle>
+          <TrendingDown className="h-4 w-4 text-white/80" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-white">{formatCurrency(summary.totalSavings)}</div>
+          <div className="text-2xl font-bold text-white">{formatCurrency(summary.totalExpensesThisMonth)}</div>
           <p className="text-xs text-white/70">
-            {dateRange?.from ? `Saved ${periodDescription}` : 'All time savings'}
+            Total expenses {periodDescription}
           </p>
         </CardContent>
       </Card>
 
-      {/* Card 4: Remaining Amount */}
+      {/* Card 3: Remaining Amount */}
       <Card 
         className="border-none shadow-lg"
         style={{ backgroundColor: remainingAmount >= 0 ? '#10b981' : '#f97316', opacity: 1 }}
@@ -268,6 +216,24 @@ export function ExpenseSummary({ dateRange, onDateRangeChange }: ExpenseSummaryP
           </div>
           <p className="text-xs text-white/70">
             {remainingAmount >= 0 ? 'Available balance' : 'Over budget'}
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Card 4: Savings */}
+      <Card 
+        className="border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
+        style={{ backgroundColor: '#3b82f6', opacity: 1 }}
+        onClick={() => navigate('/savings')}
+      >
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium text-white/80">Savings</CardTitle>
+          <PiggyBank className="h-4 w-4 text-white/80" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold text-white">{formatCurrency(summary.savingsThisMonth)}</div>
+          <p className="text-xs text-white/70">
+            Saved {periodDescription}
           </p>
         </CardContent>
       </Card>
