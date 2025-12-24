@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalFooter } from '@/components/ui/responsive-modal';
-import { DatePickerFallback } from '@/components/ui/date-picker-fallback';
+import { DatePicker } from '@/components/ui/date-picker';
 
 interface LoanModalProps {
   isOpen: boolean;
@@ -87,10 +87,12 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
       className="sm:min-w-[600px]"
     >
       <ResponsiveModalContent>
-        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-6">
-            <div className="space-y-3 sm:space-y-3">
-              <Label htmlFor="amount" className="text-base sm:text-base font-medium">Amount</Label>
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-4">
+          <div className="grid grid-cols-1 gap-5 sm:gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="amount" className="text-base sm:text-sm font-medium">
+                Amount <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="amount"
                 type="number"
@@ -99,27 +101,29 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
-                className="text-base sm:text-sm h-12 sm:h-10 px-4"
+                className="text-base sm:text-sm h-14 sm:h-10 px-4"
               />
             </div>
             
-            <div className="space-y-3">
-              <Label htmlFor="loan-type" className="text-base sm:text-sm font-medium">Type</Label>
+            <div className="space-y-2">
+              <Label htmlFor="loan-type" className="text-base sm:text-sm font-medium">
+                Type <span className="text-red-500">*</span>
+              </Label>
               <Select value={loanType} onValueChange={(value: 'given' | 'taken') => setLoanType(value)}>
-                <SelectTrigger className="text-base sm:text-sm h-12 sm:h-10">
+                <SelectTrigger className="text-base sm:text-sm h-14 sm:h-10">
                   <SelectValue placeholder="Select loan type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="given" className="text-base sm:text-sm">Given</SelectItem>
-                  <SelectItem value="taken" className="text-base sm:text-sm">Taken</SelectItem>
+                  <SelectItem value="given" className="text-base sm:text-sm py-3 sm:py-2">Given (You lent money)</SelectItem>
+                  <SelectItem value="taken" className="text-base sm:text-sm py-3 sm:py-2">Taken (You borrowed money)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label htmlFor="borrower-lender" className="text-base sm:text-sm font-medium">
-              {loanType === 'given' ? 'Borrower Name' : 'Lender Name'}
+              {loanType === 'given' ? 'Borrower Name' : 'Lender Name'} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="borrower-lender"
@@ -127,70 +131,74 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
               value={borrowerLenderName}
               onChange={(e) => setBorrowerLenderName(e.target.value)}
               required
-              className="text-base sm:text-sm h-12 sm:h-10 px-4"
+              className="text-base sm:text-sm h-14 sm:h-10 px-4"
             />
           </div>
           
-          <div className="space-y-3">
-            <Label htmlFor="description" className="text-base sm:text-sm font-medium">Description</Label>
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-base sm:text-sm font-medium">
+              Description <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="description"
               placeholder="Enter loan description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="text-base sm:text-sm h-12 sm:h-10 px-4"
+              className="text-base sm:text-sm h-14 sm:h-10 px-4"
             />
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-4">
-            <div className="space-y-3">
-              <Label className="text-base sm:text-sm font-medium">Date</Label>
-              <div className="h-12 sm:h-10">
-                <DatePickerFallback
-                  date={date}
-                  onDateChange={setDate}
-                  placeholder="Select loan date"
-                />
-              </div>
+          <div className="grid grid-cols-1 gap-5 sm:gap-4">
+            <div className="space-y-2">
+              <Label className="text-base sm:text-sm font-medium">
+                Date <span className="text-red-500">*</span>
+              </Label>
+              <DatePicker
+                date={date}
+                onDateChange={setDate}
+                placeholder="Select loan date"
+                className="h-14 sm:h-10"
+              />
             </div>
             
-            <div className="space-y-3">
-              <Label className="text-base sm:text-sm font-medium">Due Date (Optional)</Label>
-              <div className="h-12 sm:h-10">
-                <DatePickerFallback
-                  date={dueDate}
-                  onDateChange={setDueDate}
-                  placeholder="Select due date"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label className="text-base sm:text-sm font-medium">Due Date</Label>
+              <DatePicker
+                date={dueDate}
+                onDateChange={setDueDate}
+                placeholder="Select due date (optional)"
+                className="h-14 sm:h-10"
+              />
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-4">
-            <div className="space-y-3">
-              <Label htmlFor="interest-rate" className="text-base sm:text-sm font-medium">Interest Rate (%) - Optional</Label>
+          <div className="grid grid-cols-1 gap-5 sm:gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="interest-rate" className="text-base sm:text-sm font-medium">Interest Rate (%)</Label>
               <Input
                 id="interest-rate"
                 type="number"
                 step="0.01"
-                placeholder="0.00"
+                placeholder="0.00 (optional)"
                 value={interestRate}
                 onChange={(e) => setInterestRate(e.target.value)}
-                className="text-base sm:text-sm h-12 sm:h-10 px-4"
+                className="text-base sm:text-sm h-14 sm:h-10 px-4"
               />
             </div>
             
-            <div className="space-y-3">
-              <Label htmlFor="status" className="text-base sm:text-sm font-medium">Status</Label>
+            <div className="space-y-2">
+              <Label htmlFor="status" className="text-base sm:text-sm font-medium">
+                Status <span className="text-red-500">*</span>
+              </Label>
               <Select value={status} onValueChange={(value: 'active' | 'paid' | 'partially_paid') => setStatus(value)}>
-                <SelectTrigger className="text-base sm:text-sm h-12 sm:h-10">
+                <SelectTrigger className="text-base sm:text-sm h-14 sm:h-10">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active" className="text-base sm:text-sm">Active</SelectItem>
-                  <SelectItem value="partially_paid" className="text-base sm:text-sm">Partially Paid</SelectItem>
-                  <SelectItem value="paid" className="text-base sm:text-sm">Paid</SelectItem>
+                  <SelectItem value="active" className="text-base sm:text-sm py-3 sm:py-2">Active</SelectItem>
+                  <SelectItem value="partially_paid" className="text-base sm:text-sm py-3 sm:py-2">Partially Paid</SelectItem>
+                  <SelectItem value="paid" className="text-base sm:text-sm py-3 sm:py-2">Paid</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -201,9 +209,9 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
       <ResponsiveModalFooter>
         <Button 
           type="button" 
-          variant="destructive" 
+          variant="outline" 
           onClick={onClose}
-          className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
+          className="flex-1 text-base sm:text-sm h-14 sm:h-10 px-6 font-medium"
         >
           Cancel
         </Button>
@@ -211,7 +219,7 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
           type="submit" 
           disabled={addLoan.isPending || updateLoan.isPending}
           onClick={handleSubmit}
-          className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
+          className="flex-1 text-base sm:text-sm h-14 sm:h-10 px-6 font-medium"
         >
           {addLoan.isPending || updateLoan.isPending 
             ? (isEditing ? "Updating..." : "Adding...") 

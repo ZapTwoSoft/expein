@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalFooter } from '@/components/ui/responsive-modal';
-import { DatePickerFallback } from '@/components/ui/date-picker-fallback';
+import { DatePicker } from '@/components/ui/date-picker';
 
 interface IncomeModalProps {
   isOpen: boolean;
@@ -72,10 +72,12 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
         className="sm:min-w-[500px]"
     >
       <ResponsiveModalContent>
-        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-6">
-          <div className="grid grid-cols-1 gap-6 sm:gap-6">
-            <div className="space-y-3 sm:space-y-3">
-              <Label htmlFor="amount" className="text-base sm:text-base font-medium">Amount</Label>
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-4">
+          <div className="grid grid-cols-1 gap-5 sm:gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="amount" className="text-base sm:text-sm font-medium">
+                Amount <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="amount"
                 type="number"
@@ -84,43 +86,32 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
-                className="text-base sm:text-sm h-12 sm:h-10 px-4"
+                className="text-base sm:text-sm h-14 sm:h-10 px-4"
               />
             </div>
             
-            <div className="space-y-3">
-              <Label className="text-base sm:text-sm font-medium">Date</Label>
-              <div className="h-12 sm:h-10">
-                <DatePickerFallback
-                  date={date}
-                  onDateChange={setDate}
-                  placeholder="Select income date"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label className="text-base sm:text-sm font-medium">
+                Date <span className="text-red-500">*</span>
+              </Label>
+              <DatePicker
+                date={date}
+                onDateChange={setDate}
+                placeholder="Select income date"
+                className="h-14 sm:h-10"
+              />
             </div>
           </div>
           
-          <div className="space-y-3">
-            <Label htmlFor="description" className="text-base sm:text-sm font-medium">Description</Label>
-            <Input
-              id="description"
-              placeholder="Enter income description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              className="text-base sm:text-sm h-12 sm:h-10 px-4"
-            />
-          </div>
-          
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label htmlFor="category" className="text-base sm:text-sm font-medium">Category</Label>
             <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger className="text-base sm:text-sm h-12 sm:h-10">
-                <SelectValue placeholder="Select a category" />
+              <SelectTrigger className="text-base sm:text-sm h-14 sm:h-10">
+                <SelectValue placeholder="Select a category (optional)" />
               </SelectTrigger>
               <SelectContent>
                 {categories?.map((category) => (
-                  <SelectItem key={category.id} value={category.id} className="text-base sm:text-sm">
+                  <SelectItem key={category.id} value={category.id} className="text-base sm:text-sm py-3 sm:py-2">
                     <div className="flex items-center">
                       <span className="mr-2">{category.icon}</span>
                       {category.name}
@@ -130,15 +121,31 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
               </SelectContent>
             </Select>
           </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-base sm:text-sm font-medium">
+              Description <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="description"
+              placeholder="Enter income description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              className="text-base sm:text-sm h-14 sm:h-10 px-4"
+            />
+          </div>
+          
+       
         </form>
       </ResponsiveModalContent>
       
       <ResponsiveModalFooter>
         <Button 
           type="button" 
-          variant="destructive" 
+          variant="outline" 
           onClick={onClose}
-          className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
+          className="flex-1 text-base sm:text-sm h-14 sm:h-10 px-6 font-medium"
         >
           Cancel
         </Button>
@@ -146,7 +153,7 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
           type="submit" 
           disabled={addIncome.isPending || updateIncome.isPending}
           onClick={handleSubmit}
-          className="text-base sm:text-sm h-12 sm:h-9 px-6 font-medium"
+          className="flex-1 text-base sm:text-sm h-14 sm:h-10 px-6 font-medium"
         >
           {addIncome.isPending || updateIncome.isPending 
             ? (isEditing ? "Updating..." : "Adding...") 

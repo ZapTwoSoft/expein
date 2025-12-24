@@ -25,35 +25,32 @@ export function Dashboard() {
           </p>
         </div>
         
-        {/* Quick Action Buttons - 3 in a row on mobile, flex on desktop */}
-        <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-3">
+        {/* Quick Action Buttons - Stack vertically on mobile for better touch targets */}
+        <div className="grid grid-cols-1 gap-3 sm:flex sm:gap-3">
           <Button 
             onClick={() => setIsExpenseModalOpen(true)}
             variant="outline"
-            className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
+            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium"
           >
-            <TrendingDown className="h-4 w-4 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline sm:hidden">- Expense</span>
-            <span className="hidden sm:inline">Add Expense</span>
+            <TrendingDown className="h-5 w-5 sm:h-4 sm:w-4 mr-2 text-red-500" />
+            <span>Add Expense</span>
           </Button>
           
           <Button 
             onClick={() => setIsIncomeModalOpen(true)}
-            className="flex items-center justify-center  text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
+            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium"
           >
-            <TrendingUp className="h-4 w-4 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline sm:hidden">+ Income</span>
-            <span className="hidden sm:inline">Add Income</span>
+            <TrendingUp className="h-5 w-5 sm:h-4 sm:w-4 mr-2 text-green-500" />
+            <span>Add Income</span>
           </Button>
 
           <Button 
             onClick={() => setIsLoanModalOpen(true)}
             variant="secondary"
-            className="flex items-center justify-center text-xs sm:text-base h-10 sm:h-9 px-2 sm:px-4"
+            className="flex items-center justify-center text-sm sm:text-base h-12 sm:h-10 px-4 sm:px-4 font-medium"
           >
-            <HandCoins className="h-4 w-4 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline sm:hidden">Lend Loans</span>
-            <span className="hidden sm:inline">Add Loan</span>
+            <HandCoins className="h-5 w-5 sm:h-4 sm:w-4 mr-2 text-amber-500" />
+            <span>Add Loan</span>
           </Button>
         </div>
       </div>
