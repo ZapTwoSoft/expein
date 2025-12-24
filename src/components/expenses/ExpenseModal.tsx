@@ -61,6 +61,12 @@ export function ExpenseModal({ isOpen, onClose, expense }: ExpenseModalProps) {
       await addExpense.mutateAsync(expenseData);
     }
 
+    // Reset form state
+    setAmount('');
+    setDescription('');
+    setCategoryId('');
+    setDate(new Date());
+
     onClose();
   };
 

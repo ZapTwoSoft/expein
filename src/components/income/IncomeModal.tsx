@@ -62,6 +62,12 @@ export function IncomeModal({ isOpen, onClose, income }: IncomeModalProps) {
       await addIncome.mutateAsync(incomeData);
     }
 
+    // Reset form state
+    setAmount('');
+    setDescription('');
+    setCategoryId('');
+    setDate(new Date());
+
     onClose();
   };
 

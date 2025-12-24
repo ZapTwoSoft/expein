@@ -77,6 +77,16 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
       await addLoan.mutateAsync(loanData);
     }
 
+    // Reset form state
+    setAmount('');
+    setDescription('');
+    setLoanType('given');
+    setBorrowerLenderName('');
+    setDate(new Date());
+    setDueDate(undefined);
+    setInterestRate('');
+    setStatus('active');
+
     onClose();
   };
 
