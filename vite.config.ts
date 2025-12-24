@@ -18,6 +18,7 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: [
         'favicon.ico', 
+        'logo.svg',
         'favicon.svg', 
         'apple-touch-icon.png',
         'android/**/*.png',
@@ -28,13 +29,19 @@ export default defineConfig(({ mode }) => ({
         name: 'Expein - Expense Tracker',
         short_name: 'Expein',
         description: 'Track and manage your expenses and income efficiently',
-        theme_color: '#1a1a1a',
-        background_color: '#1a1a1a',
+        theme_color: '#9ef2bd',
+        background_color: '#9ef2bd',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
         start_url: '/',
         icons: [
+          {
+            src: 'logo.svg',
+            sizes: '512x512',
+            type: 'image/svg+xml',
+            purpose: 'any maskable'
+          },
           {
             src: 'android/android-launchericon-48-48.png',
             sizes: '48x48',

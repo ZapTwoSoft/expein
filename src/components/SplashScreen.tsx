@@ -35,15 +35,11 @@ export function SplashScreen() {
               logoScale ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
             }`}
           >
-            {/* Solid brand color background */}
-            <div className="absolute inset-0 bg-brand rounded-2xl shadow-2xl"></div>
-            
-            {/* Taka symbol on top */}
-            <div className="relative z-10 flex items-center justify-center">
-              <span className="text-[120px] font-black text-black select-none leading-none">
-                ৳
-              </span>
-            </div>
+            <img 
+              src="/logo.svg" 
+              alt="Expein Logo" 
+              className="w-full h-full rounded-2xl shadow-2xl"
+            />
           </div>
         </div>
 

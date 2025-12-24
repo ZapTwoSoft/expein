@@ -1,4 +1,7 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="6" fill="#2563EB"/>
-  <text x="16" y="23" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">E</text>
-</svg> 
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with brand color -->
+  <rect width="512" height="512" rx="80" fill="#9ef2bd"/>
+  
+  <!-- Taka symbol -->
+  <text x="256" y="390" font-family="Arial, sans-serif" font-size="380" font-weight="900" text-anchor="middle" fill="#000000">৳</text>
+</svg>
