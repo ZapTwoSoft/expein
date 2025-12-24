@@ -16,7 +16,14 @@ export default defineConfig(({ mode }) => ({
     componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png'],
+      includeAssets: [
+        'favicon.ico', 
+        'favicon.svg', 
+        'apple-touch-icon.png',
+        'android/**/*.png',
+        'ios/**/*.png',
+        'windows11/**/*.png'
+      ],
       manifest: {
         name: 'Expein - Expense Tracker',
         short_name: 'Expein',
@@ -29,16 +36,46 @@ export default defineConfig(({ mode }) => ({
         start_url: '/',
         icons: [
           {
-            src: 'icon-192x192.png',
+            src: 'android/android-launchericon-48-48.png',
+            sizes: '48x48',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'android/android-launchericon-72-72.png',
+            sizes: '72x72',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'android/android-launchericon-96-96.png',
+            sizes: '96x96',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'android/android-launchericon-144-144.png',
+            sizes: '144x144',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'android/android-launchericon-192-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: 'icon-512x512.png',
+            src: 'android/android-launchericon-512-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
+          },
+          {
+            src: 'ios/180.png',
+            sizes: '180x180',
+            type: 'image/png',
+            purpose: 'apple touch icon'
           }
         ],
         splash_pages: null

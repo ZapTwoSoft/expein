@@ -10,35 +10,47 @@ Your app is now configured as a Progressive Web App (PWA) with splash screen sup
 ✅ **Service Worker** - Automatic caching and updates  
 ✅ **Responsive Icons** - Optimized for all devices  
 
-## Generate PWA Icons
+## PWA Icons
 
-### Option 1: Use the Icon Generator (Recommended)
+Your app now includes comprehensive icon sets for all platforms! ✨
 
-1. Open `generate-icons.html` in your browser
-2. Click the download buttons to save all three icon files:
-   - `icon-192x192.png` (192x192 pixels)
-   - `icon-512x512.png` (512x512 pixels)
-   - `apple-touch-icon.png` (180x180 pixels)
-3. Place all downloaded files in the `/public` folder
+### Icon Structure
 
-### Option 2: Create Custom Icons
+```
+/public
+├── android/           # Android launcher icons
+│   ├── android-launchericon-48-48.png
+│   ├── android-launchericon-72-72.png
+│   ├── android-launchericon-96-96.png
+│   ├── android-launchericon-144-144.png
+│   ├── android-launchericon-192-192.png
+│   └── android-launchericon-512-512.png
+├── ios/               # iOS app icons (all sizes)
+│   ├── 180.png        # Primary Apple touch icon
+│   ├── 152.png
+│   ├── 167.png
+│   └── [additional sizes]
+└── windows11/         # Windows 11 tiles
+    ├── Square44x44Logo.*
+    ├── Square150x150Logo.*
+    ├── Wide310x150Logo.*
+    └── [additional tiles]
+```
 
-Create your own PNG icons with these dimensions:
-- **icon-192x192.png**: 192x192 pixels
-- **icon-512x512.png**: 512x512 pixels
-- **apple-touch-icon.png**: 180x180 pixels
+### Supported Platforms
 
-Save them in the `/public` folder.
+- ✅ **Android**: All launcher icon sizes (48px - 512px)
+- ✅ **iOS**: Complete icon set including Apple touch icons
+- ✅ **Windows 11**: Tiles and logos for all Windows contexts
+- ✅ **Web**: Maskable icons for modern browsers
 
-### Design Guidelines
+### Icon Guidelines
 
-- Use a **square** design (1:1 aspect ratio)
-- Include the **E** letter (Expein logo)
-- Use brand colors:
-  - Background: `#1a1a1a`
-  - Accent: `#84cc85` (brand green)
-- Add padding (10-15% from edges) for safe area
-- Design should work on both light and dark backgrounds
+All icons follow PWA best practices:
+- Square design (1:1 aspect ratio)
+- Safe area padding from edges
+- Works on both light and dark backgrounds
+- Optimized file sizes
 
 ## How to Use
 
