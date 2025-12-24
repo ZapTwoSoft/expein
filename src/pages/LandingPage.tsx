@@ -9,7 +9,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-lg border-b border-white/5">
-        <div className=" mx-auto px-6 py-4">
+        <div className=" mx-auto max-w-6xl py-4 px-6 lg:px-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               {/* <DollarSign className="h-8 w-8 text-[#9ef2bd]" /> */}
@@ -17,7 +17,7 @@ export default function LandingPage() {
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#home" className="px-4 py-2 rounded-lg bg-[#9ef2bd] text-black font-medium hover:bg-[#8ce0ab] transition-colors">
+              <a href="#home" className="px-4 py-2 rounded-lg bg-brand text-black font-medium hover:bg-brand-400 transition-colors">
                 Home
               </a>
               <a href="#features" className="text-gray-400 hover:text-white transition-colors">
@@ -35,13 +35,13 @@ export default function LandingPage() {
               <Button
                 variant="ghost"
                 onClick={() => navigate('/login')}
-                className="text-white hover:text-[#9ef2bd] hover:bg-white/5"
+                className="text-white hover:text-brand hover:bg-white/5"
               >
                 Sign in
               </Button>
               <Button
                 onClick={() => navigate('/signup')}
-                className="bg-[#9ef2bd] text-black hover:bg-[#8ce0ab] font-medium"
+                className="bg-brand text-black hover:bg-brand-400 font-medium"
               >
                 Get Started
               </Button>
@@ -66,7 +66,7 @@ export default function LandingPage() {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-4">
-              Expense tracking<span className="text-[#9ef2bd]">.</span>
+              Expense tracking<span className="text-brand">.</span>
             </h1>
             
             <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed">
@@ -79,7 +79,7 @@ export default function LandingPage() {
               <Button
                 onClick={() => navigate('/signup')}
                 size="lg"
-                className="bg-[#9ef2bd] text-black hover:bg-[#8ce0ab] font-medium px-8 py-6 text-lg"
+                className="bg-brand text-black hover:bg-brand-400 font-medium px-8 py-6 text-lg"
               >
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -99,7 +99,7 @@ export default function LandingPage() {
           <div className="mt-12 flex justify-center">
             <div className="relative">
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-[#9ef2bd]/20 blur-3xl rounded-full"></div>
+              <div className="absolute inset-0 bg-brand/20 blur-3xl rounded-full"></div>
               
               {/* iPhone Frame */}
               <div className="relative">
@@ -135,7 +135,7 @@ export default function LandingPage() {
                       {/* Header */}
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center space-x-3">
-                          <div className="w-11 h-11 bg-gradient-to-br from-[#9ef2bd] to-[#7ed19d] rounded-full flex items-center justify-center">
+                          <div className="w-11 h-11 bg-gradient-to-br from-brand to-brand-400 rounded-full flex items-center justify-center">
                             <span className="text-black font-bold text-lg">V</span>
                           </div>
                           <div>
@@ -151,7 +151,7 @@ export default function LandingPage() {
                       </div>
                       
                       {/* Balance Card */}
-                      <div className="bg-gradient-to-br from-[#9ef2bd] to-[#7ed19d] rounded-2xl p-5 mb-5 shadow-lg">
+                      <div className="bg-gradient-to-br from-brand to-brand-400 rounded-2xl p-5 mb-5 shadow-lg">
                         <div className="text-xs text-black/60 mb-1">Remaining cash</div>
                         <div className="text-3xl font-bold text-black mb-2">2,351.31 USD</div>
                         <div className="flex items-center justify-between">
@@ -174,31 +174,31 @@ export default function LandingPage() {
                           {/* Mini Bar Chart */}
                           <div className="flex items-end justify-between h-32 gap-2">
                             <div className="flex-1 flex flex-col items-center justify-end">
-                              <div className="w-full bg-gradient-to-t from-[#9ef2bd] to-[#9ef2bd]/40 rounded-t-lg" style={{height: '45%'}}></div>
+                              <div className="w-full bg-gradient-to-t from-brand to-brand/40 rounded-t-lg" style={{height: '45%'}}></div>
                               <span className="text-[9px] text-gray-400 mt-2">Mon</span>
                             </div>
                             <div className="flex-1 flex flex-col items-center justify-end">
-                              <div className="w-full bg-gradient-to-t from-[#9ef2bd] to-[#9ef2bd]/40 rounded-t-lg" style={{height: '78%'}}></div>
+                              <div className="w-full bg-gradient-to-t from-brand to-brand/40 rounded-t-lg" style={{height: '78%'}}></div>
                               <span className="text-[9px] text-gray-400 mt-2">Tue</span>
                             </div>
                             <div className="flex-1 flex flex-col items-center justify-end">
-                              <div className="w-full bg-gradient-to-t from-[#9ef2bd] to-[#9ef2bd]/40 rounded-t-lg" style={{height: '62%'}}></div>
+                              <div className="w-full bg-gradient-to-t from-brand to-brand/40 rounded-t-lg" style={{height: '62%'}}></div>
                               <span className="text-[9px] text-gray-400 mt-2">Wed</span>
                             </div>
                             <div className="flex-1 flex flex-col items-center justify-end">
-                              <div className="w-full bg-gradient-to-t from-[#9ef2bd] to-[#9ef2bd]/40 rounded-t-lg" style={{height: '91%'}}></div>
+                              <div className="w-full bg-gradient-to-t from-brand to-brand/40 rounded-t-lg" style={{height: '91%'}}></div>
                               <span className="text-[9px] text-gray-400 mt-2">Thu</span>
                             </div>
                             <div className="flex-1 flex flex-col items-center justify-end">
-                              <div className="w-full bg-gradient-to-t from-[#9ef2bd] to-[#9ef2bd]/40 rounded-t-lg" style={{height: '55%'}}></div>
+                              <div className="w-full bg-gradient-to-t from-brand to-brand/40 rounded-t-lg" style={{height: '55%'}}></div>
                               <span className="text-[9px] text-gray-400 mt-2">Fri</span>
                             </div>
                             <div className="flex-1 flex flex-col items-center justify-end">
-                              <div className="w-full bg-gradient-to-t from-[#9ef2bd] to-[#9ef2bd]/40 rounded-t-lg" style={{height: '38%'}}></div>
+                              <div className="w-full bg-gradient-to-t from-brand to-brand/40 rounded-t-lg" style={{height: '38%'}}></div>
                               <span className="text-[9px] text-gray-400 mt-2">Sat</span>
                             </div>
                             <div className="flex-1 flex flex-col items-center justify-end">
-                              <div className="w-full bg-gradient-to-t from-[#9ef2bd] to-[#9ef2bd]/40 rounded-t-lg" style={{height: '28%'}}></div>
+                              <div className="w-full bg-gradient-to-t from-brand to-brand/40 rounded-t-lg" style={{height: '28%'}}></div>
                               <span className="text-[9px] text-gray-400 mt-2">Sun</span>
                             </div>
                           </div>
@@ -267,8 +267,8 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
-              <div className="w-12 h-12 bg-[#9ef2bd]/20 rounded-xl flex items-center justify-center mb-4">
-                <PieChart className="h-6 w-6 text-[#9ef2bd]" />
+              <div className="w-12 h-12 bg-brand/20 rounded-xl flex items-center justify-center mb-4">
+                <PieChart className="h-6 w-6 text-brand" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Smart Categorization</h3>
               <p className="text-gray-400">
@@ -277,8 +277,8 @@ export default function LandingPage() {
             </div>
 
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
-              <div className="w-12 h-12 bg-[#9ef2bd]/20 rounded-xl flex items-center justify-center mb-4">
-                <TrendingUp className="h-6 w-6 text-[#9ef2bd]" />
+              <div className="w-12 h-12 bg-brand/20 rounded-xl flex items-center justify-center mb-4">
+                <TrendingUp className="h-6 w-6 text-brand" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Budget Tracking</h3>
               <p className="text-gray-400">
@@ -287,8 +287,8 @@ export default function LandingPage() {
             </div>
 
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
-              <div className="w-12 h-12 bg-[#9ef2bd]/20 rounded-xl flex items-center justify-center mb-4">
-                <Shield className="h-6 w-6 text-[#9ef2bd]" />
+              <div className="w-12 h-12 bg-brand/20 rounded-xl flex items-center justify-center mb-4">
+                <Shield className="h-6 w-6 text-brand" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Secure & Private</h3>
               <p className="text-gray-400">
@@ -297,8 +297,8 @@ export default function LandingPage() {
             </div>
 
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
-              <div className="w-12 h-12 bg-[#9ef2bd]/20 rounded-xl flex items-center justify-center mb-4">
-                <Smartphone className="h-6 w-6 text-[#9ef2bd]" />
+              <div className="w-12 h-12 bg-brand/20 rounded-xl flex items-center justify-center mb-4">
+                <Smartphone className="h-6 w-6 text-brand" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Multi-Platform</h3>
               <p className="text-gray-400">
@@ -307,8 +307,8 @@ export default function LandingPage() {
             </div>
 
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
-              <div className="w-12 h-12 bg-[#9ef2bd]/20 rounded-xl flex items-center justify-center mb-4">
-                <DollarSign className="h-6 w-6 text-[#9ef2bd]" />
+              <div className="w-12 h-12 bg-brand/20 rounded-xl flex items-center justify-center mb-4">
+                <DollarSign className="h-6 w-6 text-brand" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Income Management</h3>
               <p className="text-gray-400">
@@ -343,26 +343,26 @@ export default function LandingPage() {
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start">
-                  <CheckCircle2 className="h-6 w-6 text-[#9ef2bd] mr-3 flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="h-6 w-6 text-brand mr-3 flex-shrink-0 mt-1" />
                   <span className="text-gray-300">Easy expense tracking and categorization</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle2 className="h-6 w-6 text-[#9ef2bd] mr-3 flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="h-6 w-6 text-brand mr-3 flex-shrink-0 mt-1" />
                   <span className="text-gray-300">Visual insights with charts and reports</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle2 className="h-6 w-6 text-[#9ef2bd] mr-3 flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="h-6 w-6 text-brand mr-3 flex-shrink-0 mt-1" />
                   <span className="text-gray-300">Manage income, expenses, and loans in one place</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle2 className="h-6 w-6 text-[#9ef2bd] mr-3 flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="h-6 w-6 text-brand mr-3 flex-shrink-0 mt-1" />
                   <span className="text-gray-300">Simple and intuitive interface</span>
                 </li>
               </ul>
             </div>
             
             <div className="relative">
-              <div className="absolute inset-0 bg-[#9ef2bd]/10 blur-3xl rounded-full"></div>
+              <div className="absolute inset-0 bg-brand/10 blur-3xl rounded-full"></div>
               <div className="relative bg-gradient-to-br from-white/5 to-white/10 border border-white/10 rounded-3xl p-6">
                 <div className="space-y-4">
                   <div className="bg-black/40 rounded-xl p-4 border border-white/5">
@@ -375,16 +375,16 @@ export default function LandingPage() {
                   <div className="bg-black/40 rounded-xl p-4 border border-white/5">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-gray-400">Total Income</span>
-                      <TrendingUp className="h-4 w-4 text-[#9ef2bd]" />
+                      <TrendingUp className="h-4 w-4 text-brand" />
                     </div>
                     <div className="text-2xl font-bold">$12,500.00</div>
                   </div>
-                  <div className="bg-gradient-to-br from-[#9ef2bd]/20 to-[#9ef2bd]/10 rounded-xl p-4 border border-[#9ef2bd]/20">
+                  <div className="bg-gradient-to-br from-brand/20 to-brand/10 rounded-xl p-4 border border-brand/20">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-gray-400">Savings</span>
-                      <CheckCircle2 className="h-4 w-4 text-[#9ef2bd]" />
+                      <CheckCircle2 className="h-4 w-4 text-brand" />
                     </div>
-                    <div className="text-2xl font-bold text-[#9ef2bd]">$4,265.50</div>
+                    <div className="text-2xl font-bold text-brand">$4,265.50</div>
                   </div>
                 </div>
               </div>
@@ -408,7 +408,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#9ef2bd] to-[#7ed19d] rounded-full mr-3"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-brand to-brand-400 rounded-full mr-3"></div>
                 <div>
                   <div className="font-semibold">Sarah Johnson</div>
                   <div className="text-sm text-gray-400">Freelance Designer</div>
@@ -451,7 +451,7 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="py-16 px-6">
         <div className=" mx-auto max-w-4xl">
-          <div className="bg-gradient-to-br from-[#9ef2bd]/20 to-[#9ef2bd]/5 border border-[#9ef2bd]/20 rounded-3xl p-10 text-center">
+          <div className="bg-gradient-to-br from-brand/20 to-brand/5 border border-brand/20 rounded-3xl p-10 text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-3">
               Ready to get started?
             </h2>
@@ -461,7 +461,7 @@ export default function LandingPage() {
             <Button
               onClick={() => navigate('/signup')}
               size="lg"
-              className="bg-[#9ef2bd] text-black hover:bg-[#8ce0ab] font-medium px-8 py-6 text-lg"
+              className="bg-brand text-black hover:bg-brand-400 font-medium px-8 py-6 text-lg"
             >
               Create Free Account
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -519,4 +519,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
