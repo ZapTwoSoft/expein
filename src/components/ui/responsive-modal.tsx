@@ -2,6 +2,7 @@ import * as React from "react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter } from "@/components/ui/drawer"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
 
 interface ResponsiveModalProps {
   open: boolean
@@ -23,8 +24,8 @@ export function ResponsiveModal({
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className={className}>
-          <DialogHeader className="pb-4">
+        <DialogContent className={cn("gap-0", className)}>
+          <DialogHeader className="pb-4 flex-shrink-0">
             <DialogTitle className="text-xl font-semibold">
               {title}
             </DialogTitle>
@@ -38,7 +39,7 @@ export function ResponsiveModal({
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className={className}>
-        <DrawerHeader className="pb-4">
+        <DrawerHeader className="pb-4 flex-shrink-0">
           <DrawerTitle className="text-xl font-semibold">
             {title}
           </DrawerTitle>
@@ -59,7 +60,11 @@ export function ResponsiveModalContent({
   const isDesktop = useMediaQuery("(min-width: 640px)")
   
   return (
-    <div className={`flex-1 overflow-auto modal-scrollbar ${isDesktop ? 'p-2' : 'p-2'} ${className || ''}`}>
+    <div className={cn(
+      "flex-1 overflow-y-auto overflow-x-hidden min-h-0 modal-scrollbar",
+      isDesktop ? "px-2 pb-2" : "px-4 pb-2",
+      className
+    )}>
       {children}
     </div>
   )
@@ -76,15 +81,15 @@ export function ResponsiveModalFooter({
 
   if (isDesktop) {
     return (
-      <div className={`flex gap-3 sm:flex-row justify-end pt-4 mt-auto ${className || ''}`}>
+      <div className={cn("flex gap-3 flex-row justify-end pt-4 flex-shrink-0", className)}>
         {children}
       </div>
     )
   }
 
   return (
-    <DrawerFooter>
-      <div className={`flex gap-3 sm:flex-row justify-end ${className || ''}`}>
+    <DrawerFooter className="flex-shrink-0">
+      <div className={cn("flex gap-3 flex-row justify-end", className)}>
         {children}
       </div>
     </DrawerFooter>

@@ -37,14 +37,14 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         // Base modal styles
-        "fixed z-50 grid gap-4 border bg-background shadow-lg duration-200",
+        "fixed z-50 flex flex-col border bg-background shadow-lg duration-200",
         "data-[state=open]:animate-in data-[state=closed]:animate-out",
         "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
         
         // Mobile: Top-aligned to avoid keyboard overlap
         "left-[50%] top-2 translate-x-[-50%] w-[95vw]",
-        "max-h-[calc(100vh-1rem)] mobile-modal overflow-hidden rounded-lg p-4",
+        "max-h-[calc(100vh-1rem)] mobile-modal rounded-lg p-4",
         "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-2",
         "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-2",
         
@@ -58,9 +58,7 @@ const DialogContent = React.forwardRef<
       )}
       {...props}
     >
-      <div className="flex flex-col max-h-full min-h-0 overflow-hidden">
-        {children}
-      </div>
+      {children}
       <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground h-8 w-8 flex items-center justify-center sm:h-6 sm:w-6 z-10">
         <X className="h-5 w-5 sm:h-4 sm:w-4" />
         <span className="sr-only">Close</span>
@@ -76,7 +74,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left flex-shrink-0",
+      "flex flex-col space-y-1.5 text-center sm:text-left flex-shrink-0 pb-0",
       className
     )}
     {...props}

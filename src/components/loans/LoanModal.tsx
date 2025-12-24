@@ -3,6 +3,7 @@ import { useAddLoan, useUpdateLoan, Loan } from '@/hooks/useLoans';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalFooter } from '@/components/ui/responsive-modal';
 import { DatePicker } from '@/components/ui/date-picker';
@@ -139,13 +140,13 @@ export function LoanModal({ isOpen, onClose, loan }: LoanModalProps) {
             <Label htmlFor="description" className="text-base sm:text-sm font-medium">
               Description <span className="text-red-500">*</span>
             </Label>
-            <Input
+            <Textarea
               id="description"
               placeholder="Enter loan description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="text-base sm:text-sm h-14 sm:h-10 px-4"
+              className="text-base sm:text-sm min-h-[100px] sm:min-h-[80px] px-4 py-3 resize-none"
             />
           </div>
           
